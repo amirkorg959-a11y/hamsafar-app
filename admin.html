@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0A585D">
+<title>مدیریت هم‌سفر</title>
+<link rel="icon" href="icons/icon-192.png">
+<script src="config.js"></script>
+<style>
+:root{
+  --f:'Vazirmatn',Tahoma,system-ui,sans-serif;
+  --bg:#F1F6F5;--surface:#FFFFFF;--surface-2:#E6EFEE;--ink:#0E2A2D;--ink-2:#456266;--line:#D0DFDE;
+  --accent:#0B7A7F;--on-accent:#FFFFFF;--accent-soft:#D6EEED;--hero:#0A585D;
+  --sun-soft:#FBF0CF;--sun-text:#6B4A00;--err:#B3261E;--err-soft:#FBE3E1;--ok:#17744A;--ok-soft:#DBF2E5;--ring:rgba(11,122,127,.3);
+  direction:rtl;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0B1A1C;--surface:#12282A;--surface-2:#1A3336;--ink:#E4F0EF;--ink-2:#9AB6B8;--line:#25423F;
+  --accent:#38BDBF;--on-accent:#04282A;--accent-soft:#143B3D;--hero:#0E3F42;
+  --sun-soft:#352A0C;--sun-text:#F3D689;--err:#FF8D84;--err-soft:#3A1715;--ok:#63D69C;--ok-soft:#10301F;--ring:rgba(56,189,191,.4);color-scheme:dark}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.8 var(--f);-webkit-text-size-adjust:100%}
+h1,h2,h3,p{margin:0}h1{font-size:19px}h2{font-size:17px}h3{font-size:15px}
+header{background:var(--hero);color:#F2FBFA;padding:calc(10px + env(safe-area-inset-top)) 16px 10px;position:sticky;top:0;z-index:5}
+header .top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+header a{color:#B9DCDD;font-size:13px}
+nav.tabs{display:flex;gap:6px;overflow-x:auto;padding:8px 0 2px;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;border:0;border-radius:999px;padding:6px 14px;background:rgba(255,255,255,.14);color:#F2FBFA;font:inherit;font-size:14px;cursor:pointer;min-height:38px;position:relative}
+.tab[aria-selected=true]{background:#fff;color:#0A585D;font-weight:700}
+.tab .dot{position:absolute;top:2px;left:4px;min-width:18px;height:18px;border-radius:9px;background:#E0A100;color:#2B1E00;font-size:11px;line-height:18px;text-align:center;font-weight:700;padding:0 4px}
+#panel{display:grid;gap:14px}
+main{max-width:980px;margin:0 auto;padding:14px 14px calc(40px + env(safe-area-inset-bottom));display:grid;gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;display:grid;gap:10px;min-width:0}
+.help{color:var(--ink-2);font-size:13px}
+.err{color:var(--err)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media(min-width:640px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.stat{background:var(--surface-2);border-radius:12px;padding:10px 12px;display:grid;gap:0;min-width:0}
+.stat b{font-size:18px;overflow-wrap:anywhere}.stat span{font-size:12px;color:var(--ink-2)}
+.stat.ok b{color:var(--ok)}.stat.warn b{color:var(--sun-text)}.stat.bad b{color:var(--err)}
+button,select,input,textarea{font:inherit;color:inherit}
+.btn{border:0;border-radius:10px;padding:8px 14px;background:var(--accent);color:var(--on-accent);cursor:pointer;min-height:42px}
+.btn.ghost{background:var(--surface-2);color:var(--ink)}
+.btn.warn{background:var(--sun-soft);color:var(--sun-text)}
+.btn.bad{background:var(--err-soft);color:var(--err)}
+.btn.sm{min-height:36px;padding:4px 12px;font-size:13px}
+.btn:disabled{opacity:.5}
+select,input[type=text],input[type=number],textarea{border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--surface);min-height:42px;width:100%}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.row.sb{justify-content:space-between}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.seg button{border:0;background:var(--surface);padding:6px 14px;cursor:pointer;min-height:38px}
+.seg button[aria-pressed=true]{background:var(--accent);color:var(--on-accent)}
+.item{border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:grid;gap:4px;min-width:0}
+.item.warn{border-color:var(--sun-text)}
+.chip{display:inline-block;border-radius:999px;padding:0 10px;font-size:12px;background:var(--surface-2)}
+.chip.ok{background:var(--ok-soft);color:var(--ok)}.chip.warn{background:var(--sun-soft);color:var(--sun-text)}.chip.bad{background:var(--err-soft);color:var(--err)}
+.mono{direction:ltr;unicode-bidi:embed;font-family:ui-monospace,Menlo,monospace;font-size:12px;word-break:break-all;text-align:left}
+.bars{display:flex;align-items:flex-end;gap:4px;height:150px;padding-top:8px}
+.bar{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:2px;height:100%}
+.col{position:relative;flex:1;width:100%;max-width:34px}
+.col i{position:absolute;bottom:0;left:0;right:0;background:var(--accent);border-radius:5px 5px 0 0;min-height:2px}
+.col i.calc{background:var(--accent-soft);border:1px solid var(--accent)}
+.bar small{font-size:10px;color:var(--ink-2);white-space:nowrap}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--ink-2)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-inline-end:4px;background:var(--accent)}
+.legend i.c{background:var(--accent-soft);border:1px solid var(--accent)}
+ul.plain{margin:0;padding:0 18px 0 0;display:grid;gap:4px}
+.report{white-space:pre-wrap;line-height:2;background:var(--surface-2);border-radius:12px;padding:12px}
+dialog{border:1px solid var(--line);border-radius:16px;padding:16px;background:var(--surface);color:var(--ink);width:min(92vw,420px);direction:rtl}
+dialog::backdrop{background:rgba(5,20,22,.55)}
+.field{display:grid;gap:4px}
+label{font-size:13px;color:var(--ink-2)}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
+</style>
+</head>
+<body>
+<header>
+  <div class="top"><h1>مدیریت هم‌سفر</h1><a href="index.html">بازگشت به سایت</a></div>
+  <nav class="tabs" id="tabs" role="tablist" hidden></nav>
+</header>
+<main>
+  <div id="state" class="card"><p class="help">در حال بارگذاری…</p></div>
+  <div id="panel" hidden></div>
+</main>
+<dialog id="dlg"><form method="dialog" id="dlgf" style="display:grid;gap:12px">
+  <h2 id="dlg-t"></h2><p class="help" id="dlg-d"></p>
+  <div class="field"><label for="dlg-r" id="dlg-l">دلیل</label><textarea id="dlg-r" rows="2" maxlength="200"></textarea></div>
+  <label id="dlg-xw" class="row" style="color:var(--ink)"><input type="checkbox" id="dlg-x" style="width:auto;min-height:0"> <span id="dlg-xl"></span></label>
+  <p class="err" id="dlg-e" role="alert"></p>
+  <div class="row"><button class="btn" id="dlg-ok" value="ok">تأیید</button><button class="btn ghost" value="cancel" formnovalidate>انصراف</button></div>
+</form></dialog>
+<dialog id="dlg2"><form method="dialog" id="dlg2f" style="display:grid;gap:12px"><h2 id="d2-t"></h2><div id="d2-fields" style="display:grid;gap:10px"></div><p class="err" id="d2-e" role="alert"></p>
+  <div class="row"><button class="btn" id="d2-ok" value="ok">ذخیره</button><button class="btn ghost" value="cancel" formnovalidate>انصراف</button></div></form></dialog>
+<script>
+(function(){
+'use strict';
+const CFG=window.HAMSAFAR_CONFIG||{};
+const URL_=String(CFG.supabaseUrl||'').replace(/\/+$/,''),KEY=String(CFG.supabaseKey||'');
+const SKEY='hamsafar_session_v1';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const FA='۰۱۲۳۴۵۶۷۸۹',toFa=s=>String(s).replace(/\d/g,d=>FA[d]);
+const fmt=n=>toFa(Math.round(Number(n)||0).toString().replace(/\B(?=(\d{3})+(?!\d))/g,'٬'));
+const toman=n=>fmt(n)+' تومان';
+const ERR={not_admin:'این حساب مدیر نیست.',admin_phone_not_verified:'مدیر باید با شماره‌ی تأییدشده‌ی پیامکی وارد شده باشد.',reason_required:'دلیل را بنویسید (حداقل ۳ حرف).',already_decided:'درباره‌ی این مورد قبلاً تصمیم گرفته شده است.',not_found:'پیدا نشد.',bad_ad_description:'توضیحات حداقل ۱۰ حرف.',bad_ad_phone:'شماره‌ی تماس درست نیست.',bad_ad_link:'لینک باید https باشد.',bad_ad_business:'نام کسب‌وکار درست نیست.',cannot_block_admin:'مدیر را نمی‌شود مسدود کرد.',bad_rate:'نرخ باید بین ۰ تا ۲۰ درصد باشد.',bad_min:'حداقل کمیسیون نامعتبر است.',bad_grace:'مهلت پرداخت باید بین ۰ تا ۶۰ روز باشد.',ai_rate_limited:'گزارش هوشمند را خیلی پشت‌سرهم خواستید. یک دقیقه صبر کنید.',ai_not_configured:'کلید هوش مصنوعی هنوز در Secrets سرور تنظیم نشده است.',ai_failed:'سرویس هوش مصنوعی پاسخ نداد. بعداً دوباره امتحان کنید.'};
+const SK=KEY.indexOf('service_role')>=0||/^sb_secret_/.test(KEY);
+let session=null;try{session=JSON.parse(localStorage.getItem(SKEY)||'null')}catch(_){}
+const D={}; let tab='home',loaded={};
+const TABS=[['home','نمای کلی'],['rev','درآمد'],['debt','بدهی‌ها'],['drv','رانندگان'],['alr','هشدارها'],['pay','پرداخت‌ها'],['ai','گزارش هوشمند'],['ads','تبلیغات'],['log','تاریخچه'],['set','تنظیمات']];
+
+async function http(url,o){
+  let r;try{r=await fetch(url,Object.assign({cache:'no-store'},o))}catch(_){throw{net:true}}
+  let d=null;try{d=await r.json()}catch(_){}
+  if(!r.ok)throw{status:r.status,data:d};return d;
+}
+async function token(){
+  if(!session||!session.access_token)return null;
+  if(session.expires_at-Math.floor(Date.now()/1000)>60)return session.access_token;
+  try{
+    const j=await http(URL_+'/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify({refresh_token:session.refresh_token})});
+    session={access_token:j.access_token,refresh_token:j.refresh_token,expires_at:Math.floor(Date.now()/1000)+(Number(j.expires_in)||3600),user:{id:j.user.id}};
+    try{localStorage.setItem(SKEY,JSON.stringify(session))}catch(_){}
+    return session.access_token;
+  }catch(_){return null}
+}
+async function rpc(name,args){
+  const t=await token();if(!t)throw{status:401};
+  return http(URL_+'/rest/v1/rpc/'+name,{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+t,'Content-Type':'application/json'},body:JSON.stringify(args||{})});
+}
+const why=e=>{
+  if(e&&e.net)return 'اتصال برقرار نشد.';
+  const d=(e&&e.data)||{},m=String(d.message||'')+' '+String(d.error||'');
+  for(const k in ERR)if(m.indexOf(k)>=0)return ERR[k];
+  return 'خطا ('+(e&&e.status||'؟')+').';
+};
+/* ---------- تاریخ شمسی ---------- */
+const pd=s=>{const p=String(s).slice(0,10).split('-').map(Number);return new Date(Date.UTC(p[0],p[1]-1,p[2],12))};
+const jf=(o)=>new Intl.DateTimeFormat('fa-IR-u-ca-persian',Object.assign({timeZone:'UTC'},o));
+const jDay=s=>jf({day:'numeric',month:'short'}).format(pd(s));
+const jMon=s=>jf({month:'long'}).format(pd(s));
+const jFull=s=>jf({year:'numeric',month:'long',day:'numeric'}).format(pd(s));
+const jTime=s=>{try{return s?new Intl.DateTimeFormat('fa-IR-u-ca-persian',{timeZone:'Asia/Tehran',year:'numeric',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}).format(new Date(s)):'—'}catch(_){return '—'}};
+/* ---------- اجزا ---------- */
+const stat=(l,v,c)=>'<div class="stat '+(c||'')+'"><b>'+v+'</b><span>'+l+'</span></div>';
+const CHIP={due:['در انتظار','warn'],paid:['پرداخت شد','ok'],waived:['بخشوده',''],initiated:['شروع‌شده',''],failed:['ناموفق','bad'],canceled:['لغو‌شده توسط کاربر','warn'],duplicate:['تکراری','bad']};
+const chip=s=>{const p=CHIP[s]||[s,''];return '<span class="chip '+p[1]+'">'+esc(p[0])+'</span>'};
+const who=x=>esc(toFa(x.name||'بدون نام'))+(x.phone?' <span class="mono" style="white-space:nowrap;word-break:normal">'+esc(x.phone)+'</span>':'');
+const empty=t=>'<p class="help">'+t+'</p>';
+function dialog(o){
+  return new Promise(res=>{
+    const d=$('#dlg');$('#dlg-t').textContent=o.title;$('#dlg-d').textContent=o.text||'';$('#dlg-r').value='';$('#dlg-e').textContent='';
+    $('#dlg-xw').hidden=!o.check;$('#dlg-xl').textContent=o.check||'';$('#dlg-x').checked=!!o.checkDefault;$('#dlg-ok').textContent=o.ok||'تأیید';
+    $('#dlg-ok').onclick=ev=>{const r=$('#dlg-r').value.trim();if(r.length<3){ev.preventDefault();$('#dlg-e').textContent=ERR.reason_required}};
+    d.onclose=()=>res(d.returnValue==='ok'?{reason:$('#dlg-r').value.trim(),check:$('#dlg-x').checked}:null);
+    d.showModal();
+  });
+}
+/* ---------- بارگذاری ---------- */
+function formDialog(o){
+  return new Promise(res=>{
+    const d=$('#dlg2');$('#d2-t').textContent=o.title;$('#d2-e').textContent='';
+    $('#d2-fields').innerHTML=o.fields.map(f=>f.type==='check'?'<label class="row" style="color:var(--ink)"><input type="checkbox" id="f-'+f.id+'" style="width:auto;min-height:0"'+(f.value?' checked':'')+'> '+esc(f.label)+'</label>':
+      '<div class="field"><label for="f-'+f.id+'">'+esc(f.label)+'</label>'+(f.type==='select'?'<select id="f-'+f.id+'">'+f.options.map(x=>'<option value="'+esc(x[0])+'"'+(x[0]===f.value?' selected':'')+'>'+esc(x[1])+'</option>').join('')+'</select>':(f.type==='area'?'<textarea id="f-'+f.id+'" rows="3">'+esc(f.value||'')+'</textarea>':'<input id="f-'+f.id+'" type="'+(f.type||'text')+'" value="'+esc(f.value==null?'':f.value)+'"'+(f.dir?' dir="'+f.dir+'"':'')+'>'))+'</div>').join('');
+    const gather=()=>{const v={};o.fields.forEach(f=>{const el=$('#f-'+f.id);v[f.id]=f.type==='check'?el.checked:el.value.trim()});return v};
+    $('#d2-ok').onclick=ev=>{const bad=o.validate&&o.validate(gather());if(bad){ev.preventDefault();$('#d2-e').textContent=bad}};
+    d.onclose=()=>res(d.returnValue==='ok'?gather():null);d.showModal();
+  });
+}
+const need=async(k,fn)=>{if(!loaded[k]){D[k]=await fn();loaded[k]=true}return D[k]};
+const LOAD={
+  ov:()=>rpc('admin_overview'),
+  al:()=>rpc('admin_alerts'),
+  s14:()=>rpc('admin_revenue_series',{p_period:'day',p_count:14}),
+};
+async function base(){
+  const out=await Promise.all([LOAD.ov(),LOAD.al(),LOAD.s14()]);
+  D.ov=out[0];D.al=out[1];D.s14=out[2];
+  D.adc=await rpc('admin_ads_counts').catch(()=>null);loaded.ov=loaded.al=loaded.s14=true;
+}
+function alertCount(){
+  const a=D.al||{};return (a.cancelled_by_driver||[]).filter(x=>x.cancelled>=2).length+(a.overdue||[]).length+(a.failed_payments||[]).length+Number(a.duplicate_payments||0)+Number(a.stuck_payments||0);
+}
+function drawTabs(){
+  $('#tabs').hidden=false;
+  const n=alertCount();
+  $('#tabs').innerHTML=TABS.map(t=>'<button class="tab" role="tab" data-tab="'+t[0]+'" aria-selected="'+(t[0]===tab)+'">'+t[1]+(t[0]==='alr'&&n?'<span class="dot">'+toFa(n)+'</span>':'')+(t[0]==='ads'&&D.adc&&D.adc.pending?'<span class="dot">'+toFa(D.adc.pending)+'</span>':'')+'</button>').join('');
+}
+function smart(){
+  const o=D.ov,s=D.s14||[],a=D.al||{},L=[];
+  const last7=s.slice(-7).reduce((x,r)=>x+r.paid_amount,0),prev7=s.slice(0,7).reduce((x,r)=>x+r.paid_amount,0);
+  if(prev7>0){const p=Math.round(100*(last7-prev7)/prev7);L.push('درآمد دریافت‌شده‌ی ۷ روز اخیر '+toman(last7)+' است؛ '+(p>=0?toFa(p)+'٪ بیشتر':toFa(-p)+'٪ کمتر')+' از ۷ روز قبل.')}
+  else if(last7>0)L.push('درآمد دریافت‌شده‌ی ۷ روز اخیر '+toman(last7)+' است (هفته‌ی قبل درآمدی نبود).');
+  else L.push('در ۷ روز اخیر درآمدی دریافت نشده است.');
+  const calc7=s.slice(-7).reduce((x,r)=>x+r.calc_amount,0);
+  if(calc7>0&&last7<calc7)L.push('از کمیسیون محاسبه‌شده‌ی ۷ روز اخیر ('+toman(calc7)+') فقط '+toFa(Math.round(100*last7/calc7))+'٪ پرداخت شده است.');
+  if(o.overdue_count>0)L.push(fmt(o.overdue_count)+' کمیسیون سررسیدگذشته ('+toman(o.overdue_amount)+') وجود دارد؛ در «بدهی‌ها» می‌توانید پیگیری یا مسدود کنید.');
+  const bad=(a.cancelled_by_driver||[]).filter(x=>x.cancelled>=3);
+  if(bad.length)L.push(fmt(bad.length)+' راننده در ۷ روز اخیر ۳ سفر یا بیشتر را لغو کرده‌اند.');
+  if(o.payments_failed_7d>0&&o.payments_failed_7d>=o.payments_paid_7d)L.push('پرداخت‌های ناموفق ۷ روز اخیر ('+fmt(o.payments_failed_7d)+') از موفق‌ها ('+fmt(o.payments_paid_7d)+') کمتر نیست؛ درگاه یا تجربه‌ی پرداخت را بررسی کنید.');
+  if(Number(a.stuck_payments)>0)L.push(fmt(a.stuck_payments)+' پرداخت بیش از یک ساعت نیمه‌تمام مانده است.');
+  if(Number(o.payments_duplicate)>0)L.push(fmt(o.payments_duplicate)+' پرداخت تکراری ثبت شده؛ باید در پنل زرین‌پال بررسی و در صورت لزوم برگشت زده شود.');
+  if(L.length===1&&!o.due_count&&!o.overdue_count)L.push('مورد نگران‌کننده‌ای دیده نمی‌شود.');
+  return L;
+}
+/* ---------- نمایش تب‌ها ---------- */
+const V={};
+V.home=()=>{
+  const o=D.ov;
+  return '<section class="card"><h2>خلاصه‌ی هوشمند</h2><ul class="plain">'+smart().map(x=>'<li>'+x+'</li>').join('')+'</ul><p class="help">این خلاصه با قاعده‌های ساده از همین اعداد ساخته می‌شود (بدون هوش مصنوعی). تحلیل عمیق‌تر در تب «گزارش هوشمند» است.</p></section>'+
+  '<section class="card"><h2>کاربران و سفرها</h2><div class="grid">'+
+    stat('رانندگان',fmt(o.drivers))+stat('مسافران',fmt(o.passengers))+stat('سفرهای باز',fmt(o.trips_open))+stat('سفرهای انجام‌شده',fmt(o.trips_completed),'ok')+
+    stat('سفرهای لغوشده',fmt(o.trips_cancelled),o.trips_cancelled?'warn':'')+stat('درخواست‌ها (تأییدشده/کل)',fmt(o.requests_approved)+' / '+fmt(o.requests_total))+stat('در انتظار تأیید',fmt(o.requests_pending))+stat('رانندگان مسدود',fmt(o.blocked),o.blocked?'bad':'')+'</div>'+
+    '<p class="help">سفرهای قدیمی‌تر از ۳۰ روز طبق تنظیم پاک‌سازی حذف می‌شوند؛ شمار «باز/لغو» فقط همین مدت را نشان می‌دهد ولی «انجام‌شده» و درآمد همیشگی است.</p></section>'+
+  '<section class="card"><h2>درآمد (کمیسیون ۵٪)</h2><div class="grid">'+
+    stat('امروز',toman(o.revenue_today),'ok')+stat('۷ روز اخیر',toman(o.revenue_7d),'ok')+stat('۳۰ روز اخیر',toman(o.revenue_30d),'ok')+stat('کل',toman(o.revenue_total),'ok')+
+    stat('بدهی رانندگان ('+fmt(o.due_count)+')',toman(o.due_amount),o.due_amount?'warn':'')+stat('معوق ('+fmt(o.overdue_count)+')',toman(o.overdue_amount),o.overdue_amount?'bad':'')+stat('رانندگان بدهکار',fmt(o.debtors))+stat('کمیسیون محاسبه‌شده‌ی امروز',toman(o.commission_today))+'</div></section>';
+};
+let revP='day';
+V.rev=()=>{
+  const s=D['rev_'+revP]||[];
+  const mx=Math.max(1,...s.map(r=>Math.max(r.paid_amount,r.calc_amount)));
+  const lab=r=>revP==='month'?jMon(r.bucket):jDay(r.bucket);
+  const tot=s.reduce((a,r)=>({p:a.p+r.paid_amount,c:a.c+r.calc_amount,t:a.t+r.trips,g:a.g+r.gross_amount}),{p:0,c:0,t:0,g:0});
+  return '<section class="card"><div class="row sb"><h2>درآمد</h2><div class="seg" role="group" aria-label="بازه">'+[['day','روزانه'],['week','هفتگی'],['month','ماهانه']].map(x=>'<button type="button" data-rev="'+x[0]+'" aria-pressed="'+(revP===x[0])+'">'+x[1]+'</button>').join('')+'</div></div>'+
+  '<div class="legend"><span><i></i>پرداخت‌شده</span><span><i class="c"></i>کمیسیون محاسبه‌شده (پرداخت‌نشده هم)</span></div>'+
+  '<div class="bars" role="img" aria-label="نمودار درآمد">'+s.map(r=>'<div class="bar"><div class="col"><i class="calc" style="height:'+Math.round(100*r.calc_amount/mx)+'%" title="'+toman(r.calc_amount)+'"></i><i style="height:'+Math.round(100*r.paid_amount/mx)+'%" title="'+toman(r.paid_amount)+'"></i></div><small>'+lab(r)+'</small></div>').join('')+'</div>'+
+  '<div class="grid">'+stat('پرداخت‌شده در این بازه',toman(tot.p),'ok')+stat('کمیسیون محاسبه‌شده',toman(tot.c))+stat('سفر انجام‌شده',fmt(tot.t))+stat('مجموع کرایه‌ها',toman(tot.g))+'</div></section>'+
+  '<section class="card"><h3>جدول</h3>'+(s.slice().reverse().map(r=>'<div class="item"><div class="row sb"><b>'+(revP==='week'?'هفته‌ی شروع '+jDay(r.bucket):(revP==='month'?jMon(r.bucket)+' '+toFa(jf({year:'numeric'}).format(pd(r.bucket))):jFull(r.bucket)))+'</b><span class="chip ok">'+toman(r.paid_amount)+'</span></div><div class="help">محاسبه‌شده: '+toman(r.calc_amount)+' · '+fmt(r.trips)+' سفر · کرایه‌ها: '+toman(r.gross_amount)+'</div></div>').join('')||empty('داده‌ای نیست.'))+'</section>';
+};
+const blockBtn=x=>x.driver_id?(x.blocked?'<button class="btn ghost sm" type="button" data-unblock="'+esc(x.driver_id)+'">آزادسازی</button>':'<button class="btn bad sm" type="button" data-block="'+esc(x.driver_id)+'" data-name="'+esc(x.name||'')+'">مسدود کردن</button>'):'';
+V.debt=()=>{
+  const d=D.debt||[];
+  return '<section class="card"><h2>بدهی رانندگان</h2><p class="help">فقط رانندگانی که کمیسیون پرداخت‌نشده دارند. مسدود بودن راننده جلوی ثبت سفر جدید را می‌گیرد، ولی او همچنان می‌تواند بدهی‌اش را آنلاین بپردازد.</p></section>'+
+  (d.length?d.map(x=>'<div class="item'+(x.overdue_count?' warn':'')+'"><div class="row sb"><b>'+who(x)+'</b>'+(x.blocked?'<span class="chip bad">مسدود</span>':'')+'</div>'+
+    '<div>بدهی: <b>'+toman(x.due_amount)+'</b> ('+fmt(x.due_count)+' سفر)'+(x.overdue_count?' · <span class="chip bad">معوق '+toman(x.overdue_amount)+'</span>':'')+'</div>'+
+    '<div class="help">قدیمی‌ترین سررسید: '+jTime(x.oldest_due_at)+' · تاکنون پرداخت‌شده: '+toman(x.paid_amount)+'</div><div class="row">'+blockBtn(x)+'</div></div>').join(''):'<section class="card">'+empty('هیچ راننده‌ای بدهی ندارد. 🎉')+'</section>');
+};
+let perfD=30;
+V.drv=()=>{
+  const p=D['perf_'+perfD]||[];
+  return '<section class="card"><div class="row sb"><h2>عملکرد رانندگان</h2><div class="seg" role="group" aria-label="بازه">'+[[7,'۷ روز'],[30,'۳۰ روز'],[90,'۹۰ روز']].map(x=>'<button type="button" data-perf="'+x[0]+'" aria-pressed="'+(perfD===x[0])+'">'+x[1]+'</button>').join('')+'</div></div><p class="help">تعداد «ثبت‌شده» و «لغو» فقط سفرهای ۳۰ روز اخیر را شامل می‌شود (پاک‌سازی خودکار).</p></section>'+
+  (p.length?p.map(x=>'<div class="item"><div class="row sb"><b>'+who(x)+'</b>'+(x.blocked?'<span class="chip bad">مسدود</span>':'')+'</div>'+
+    '<div class="row"><span class="chip">ثبت‌شده '+fmt(x.registered)+'</span><span class="chip ok">انجام‌شده '+fmt(x.completed)+'</span><span class="chip '+(x.cancel_rate>=40?'bad':(x.cancelled?'warn':''))+'">لغو '+fmt(x.cancelled)+' ('+fmt(x.cancel_rate)+'٪)</span><span class="chip">'+fmt(x.seats)+' صندلی</span></div>'+
+    '<div class="help">کرایه‌ی مسافران: '+toman(x.gross)+' · کمیسیون پرداخت‌شده: '+toman(x.commission_paid)+' · بدهی: '+toman(x.commission_due)+'</div><div class="row">'+blockBtn(x)+'</div></div>').join(''):'<section class="card">'+empty('داده‌ای در این بازه نیست.')+'</section>');
+};
+V.alr=()=>{
+  const a=D.al||{};let h='';
+  const sec=(t,n,body)=>'<section class="card"><div class="row sb"><h2>'+t+'</h2><span class="chip '+(n?'warn':'ok')+'">'+fmt(n)+'</span></div>'+body+'</section>';
+  h+=sec('سفرهای لغوشده (۷ روز اخیر)',(a.cancelled_by_driver||[]).length,(a.cancelled_by_driver||[]).map(x=>'<div class="item'+(x.cancelled>=3?' warn':'')+'"><div class="row sb"><b>'+who(x)+'</b><span class="chip '+(x.cancelled>=3?'bad':'warn')+'">'+fmt(x.cancelled)+' لغو</span></div><div class="row">'+blockBtn(x)+'</div></div>').join('')||empty('لغوی نبوده است.'));
+  h+=sec('پرداخت‌های معوق',(a.overdue||[]).length,(a.overdue||[]).map(x=>'<div class="item warn"><div class="row sb"><b>'+who(x)+'</b><span class="chip bad">'+fmt(x.days_overdue)+' روز دیرکرد</span></div><div>'+toman(x.amount)+' · سررسید '+jTime(x.due_at)+'</div><div class="row">'+blockBtn(x)+'</div></div>').join('')||empty('معوقه‌ای نیست.'));
+  h+=sec('پرداخت‌های ناموفق/لغوشده (۷ روز اخیر)',(a.failed_payments||[]).length,(a.failed_payments||[]).map(x=>'<div class="item"><div class="row sb">'+chip(x.status)+'<span class="help">'+jTime(x.at)+'</span></div><div>'+toman(x.amount)+(x.reason?' · <span class="help">'+esc(x.reason)+'</span>':'')+'</div></div>').join('')||empty('موردی نیست.'));
+  h+=sec('نیازمند بررسی',Number(a.duplicate_payments||0)+Number(a.stuck_payments||0),'<p>پرداخت تکراری: <b>'+fmt(a.duplicate_payments)+'</b> (باید در پنل زرین‌پال بررسی شود)</p><p>پرداخت نیمه‌تمام بیش از یک ساعت: <b>'+fmt(a.stuck_payments)+'</b></p>');
+  return h;
+};
+let payF='';
+V.pay=()=>{
+  const c=D['comm_'+payF]||[],p=D.pays||[];
+  return '<section class="card"><div class="row sb"><h2>کمیسیون‌ها</h2><select id="payf" style="width:auto" aria-label="فیلتر"><option value="">همه</option><option value="due">در انتظار</option><option value="paid">پرداخت‌شده</option><option value="waived">بخشوده</option></select></div>'+
+   (c.map(x=>'<div class="item"><div class="row sb"><b>'+esc(toFa(x.origin))+' ← '+esc(toFa(x.destination))+'</b>'+chip(x.status)+(x.overdue?'<span class="chip bad">معوق</span>':'')+'</div><div>راننده: '+who({name:x.driver_name,phone:x.driver_phone})+'</div><div>کرایه '+toman(x.gross_amount)+' · کمیسیون <b>'+toman(x.amount)+'</b> · '+fmt(x.seats)+' صندلی</div><div class="help">'+jFull(x.trip_date)+(x.paid_at?' · پرداخت: '+jTime(x.paid_at):'')+(x.waive_reason?' · دلیل بخشودن: '+esc(x.waive_reason):'')+'</div>'+(x.status==='due'?'<div class="row"><button class="btn warn sm" type="button" data-waive="'+esc(x.commission_id)+'">بخشودن</button></div>':'')+'</div>').join('')||empty('موردی نیست.'))+'</section>'+
+  '<section class="card"><h2>پرداخت‌های درگاه</h2>'+(p.map(x=>'<div class="item"><div class="row sb">'+chip(x.status)+'<span class="help">'+jTime(x.created_at)+'</span></div><div>'+toman(x.amount)+(x.ref_id?' · کد پیگیری <span class="mono">'+esc(x.ref_id)+'</span>':'')+'</div>'+(x.card_pan?'<div class="mono">'+esc(x.card_pan)+'</div>':'')+(x.failure_reason?'<div class="help">'+esc(x.failure_reason)+'</div>':'')+'</div>').join('')||empty('هنوز پرداختی ثبت نشده است.'))+'</section>';
+};
+V.ai=()=>{
+  const r=D.ai||[];
+  return '<section class="card"><h2>گزارش هوشمند با هوش مصنوعی</h2><p class="help">یک تحلیل فارسی از درآمد، بدهی، رفتار رانندگان و هشدارها. هوش مصنوعی فقط داده‌ی <b>بی‌نام</b> (بدون نام، شماره و شناسه) را می‌خواند و فقط متن می‌نویسد؛ نمی‌تواند چیزی را تغییر دهد، حذف کند، پرداخت را تأیید کند یا کسی را مسدود کند. تصمیم‌ها با شماست. هر بار گزارش گرفتن هزینه‌ی کم API دارد.</p>'+
+   '<div class="row"><select id="aid" style="width:auto"><option value="14">۱۴ روز اخیر</option><option value="30" selected>۳۰ روز اخیر</option><option value="90">۹۰ روز اخیر</option></select><button class="btn" id="aigo" type="button">ساخت گزارش جدید</button></div><p id="aimsg" class="err" role="alert"></p><p class="help" id="aibusy" hidden>در حال نوشتن گزارش… (تا یک دقیقه)</p></section>'+
+   (r.length?r.map((x,i)=>'<section class="card"><div class="row sb"><h3>'+(i?'گزارش قبلی':'آخرین گزارش')+'</h3><span class="help">'+jTime(x.created_at)+' · '+toFa(x.days)+' روز</span></div><div class="report">'+esc(x.report)+'</div></section>').join(''):'<section class="card">'+empty('هنوز گزارشی ساخته نشده است.')+'</section>');
+};
+const ACT={ad_approve:'تأیید تبلیغ',ad_reject:'رد تبلیغ',ad_edit:'ویرایش تبلیغ',ad_delete:'حذف تبلیغ',ad_tier:'تغییر سطح تبلیغ (ویژه)',update_settings:'تغییر تنظیمات',block_driver:'مسدود کردن راننده',unblock_driver:'آزادسازی راننده',waive_commission:'بخشودن کمیسیون',ai_report:'ساخت گزارش هوشمند'};
+let adF='pending';
+const okImg=x=>/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/=]+$/.test(String(x||''));
+const AST={pending:['در انتظار','warn'],approved:['تأییدشده','ok'],rejected:['ردشده','bad']};
+V.ads=()=>{
+  const l=D['ads_'+adF]||[],c=D.adc;
+  if(!c)return '<section class="card"><h2>مدیریت تبلیغات</h2><p class="help">SQL تبلیغات هنوز اجرا نشده است. فایل supabase-ads.sql را در Supabase اجرا کنید.</p></section>';
+  const seg=[['pending','در انتظار ('+fmt(c.pending)+')'],['approved','تأییدشده ('+fmt(c.approved)+')'],['rejected','ردشده ('+fmt(c.rejected)+')'],['','همه']];
+  return '<section class="card"><h2>مدیریت تبلیغات</h2><p class="help">تبلیغ تا تأیید شما برای عموم نمایش داده نمی‌شود. شماره‌ی تماس تبلیغ پس از تأیید عمومی است؛ نام مسئول فقط برای شماست.</p><div class="seg" role="group" aria-label="وضعیت" style="flex-wrap:wrap">'+seg.map(x=>'<button type="button" data-adf="'+x[0]+'" aria-pressed="'+(adF===x[0])+'">'+x[1]+'</button>').join('')+'</div></section>'+
+  (l.length?l.map(x=>{const st=AST[x.status]||[x.status,''];const feat=x.tier==='featured';return '<div class="item"><div class="row sb"><b>'+esc(toFa(x.business_name))+'</b><span><span class="chip '+st[1]+'">'+st[0]+'</span>'+(feat?' <span class="chip warn">ویژه'+(x.featured_until?' تا '+jTime(x.featured_until):'')+'</span>':'')+'</span></div>'+
+    (okImg(x.image_data)?'<img src="'+x.image_data+'" alt="" style="width:100%;max-height:180px;object-fit:cover;border-radius:10px">':'<p class="help">بدون تصویر</p>')+
+    '<div>'+esc(toFa(x.description))+'</div><div class="help">مسئول: '+esc(toFa(x.contact_name))+' · ثبت‌کننده: '+esc(toFa(x.owner_name||'—'))+' · تلفن: <span class="mono" style="white-space:nowrap;word-break:normal">'+esc(x.phone)+'</span>'+(x.link?' · <a href="'+esc(x.link)+'" target="_blank" rel="noopener noreferrer nofollow">لینک</a>':'')+'</div>'+
+    '<div class="help">ثبت: '+jTime(x.created_at)+(x.reject_reason?' · دلیل رد: '+esc(x.reject_reason):'')+(x.paid_amount?' · پرداختی: '+toman(x.paid_amount):'')+'</div>'+
+    '<div class="row">'+(x.status!=='approved'?'<button class="btn sm" type="button" data-adok="'+esc(x.id)+'">تأیید</button>':'')+(x.status!=='rejected'?'<button class="btn warn sm" type="button" data-adno="'+esc(x.id)+'">رد</button>':'')+'<button class="btn ghost sm" type="button" data-adedit="'+esc(x.id)+'">ویرایش</button><button class="btn ghost sm" type="button" data-adtier="'+esc(x.id)+'">ویژه/پولی</button><button class="btn bad sm" type="button" data-addel="'+esc(x.id)+'">حذف</button></div></div>'}).join(''):'<section class="card">'+empty('تبلیغی در این وضعیت نیست.')+'</section>');
+};
+V.log=()=>{
+  const l=D.log||[];
+  return '<section class="card"><h2>تاریخچه‌ی تغییرات مدیریتی</h2><p class="help">هر تغییر مدیریتی اینجا ثبت می‌شود و قابل پاک‌کردن نیست.</p></section>'+
+   (l.map(x=>{const d=x.detail||{};return '<div class="item"><div class="row sb"><b>'+(ACT[x.action]||esc(x.action))+'</b><span class="help">'+jTime(x.at)+'</span></div><div class="help">توسط '+esc(toFa(x.admin_name||'مدیر'))+(d.reason?' · دلیل: '+esc(d.reason):'')+(d.cancelled_open_trips?' · '+fmt(d.cancelled_open_trips)+' سفر باز لغو شد':'')+(d.amount?' · مبلغ '+toman(d.amount):'')+(x.action==='update_settings'&&d.old&&d.new?' · نرخ '+toFa(d.old.rate_bps/100)+'٪ ← '+toFa(d.new.rate_bps/100)+'٪':'')+'</div></div>'}).join('')||'<section class="card">'+empty('هنوز تغییری ثبت نشده است.')+'</section>');
+};
+V.set=()=>{
+  const s=D.set||{};
+  return '<section class="card"><h2>تنظیمات کمیسیون</h2><p class="help">تغییر فقط روی کمیسیون‌های <b>بعدی</b> اثر دارد؛ کمیسیون‌های ثبت‌شده عوض نمی‌شوند. هر تغییر در تاریخچه ثبت می‌شود.</p>'+
+   '<label class="row" style="color:var(--ink)"><input type="checkbox" id="s-en" style="width:auto;min-height:0" '+(s.enabled?'checked':'')+'> دریافت کمیسیون فعال باشد</label>'+
+   '<div class="field"><label for="s-rate">نرخ کمیسیون (درصد)</label><input id="s-rate" type="number" step="0.1" min="0" max="20" inputmode="decimal" value="'+(s.rate_bps/100)+'"></div>'+
+   '<div class="field"><label for="s-min">حداقل کمیسیون (تومان؛ کمتر از آن بخشوده می‌شود)</label><input id="s-min" type="number" min="0" inputmode="numeric" value="'+s.min_amount+'"></div>'+
+   '<div class="field"><label for="s-grace">مهلت پرداخت پس از سفر (روز)</label><input id="s-grace" type="number" min="0" max="60" inputmode="numeric" value="'+s.grace_days+'"></div>'+
+   '<p id="smsg" class="err" role="alert"></p><div class="row"><button class="btn" id="ssave" type="button">ذخیره</button></div></section>';
+};
+/* ---------- رندر و بارگذاری تنبل ---------- */
+async function ensure(){
+  if(tab==='rev')await need('rev_'+revP,()=>rpc('admin_revenue_series',{p_period:revP,p_count:revP==='day'?14:(revP==='week'?8:6)}));
+  if(tab==='debt')D.debt=await rpc('admin_driver_debts',{p_limit:100});
+  if(tab==='drv')D['perf_'+perfD]=await rpc('admin_driver_performance',{p_days:perfD,p_limit:100});
+  if(tab==='pay'){D['comm_'+payF]=await rpc('admin_list_commissions',{p_status:payF||null,p_limit:100,p_offset:0});D.pays=await rpc('admin_list_payments',{p_limit:50,p_offset:0})}
+  if(tab==='ai')D.ai=await rpc('admin_list_ai_reports',{p_limit:5});
+  if(tab==='ads')D['ads_'+adF]=await rpc('admin_list_ads',{p_status:adF||null,p_limit:60});
+  if(tab==='log')D.log=await rpc('admin_list_audit',{p_limit:100,p_offset:0});
+  if(tab==='set')D.set=await rpc('admin_get_settings');
+}
+let rseq=0;
+async function render(refresh){
+  const p=$('#panel');p.hidden=false;
+  const my=++rseq;                       // اگر درخواست تازه‌تری آمد، نتیجه‌ی قدیمی صفحه را بازنویسی نمی‌کند
+  try{
+    if(refresh){loaded={};await base()}
+    await ensure();
+    if(my!==rseq)return;
+    drawTabs();p.innerHTML=V[tab]();
+    if(tab==='pay')$('#payf').value=payF;
+  }catch(e){drawTabs();p.innerHTML='<section class="card"><p class="err">'+esc(why(e))+'</p><button class="btn" type="button" data-retry>تلاش دوباره</button></section>'}
+}
+async function after(fn){try{await fn();await render(true)}catch(e){const m=$('#panel');m.insertAdjacentHTML('afterbegin','<section class="card"><p class="err" role="alert">'+esc(why(e))+'</p></section>')}}
+document.addEventListener('click',async e=>{
+  const t=e.target.closest('button');if(!t)return;
+  if(t.dataset.tab){tab=t.dataset.tab;window.scrollTo(0,0);await render(false);return}
+  if(t.hasAttribute('data-retry')){await render(true);return}
+  if(t.dataset.rev){revP=t.dataset.rev;await render(false);return}
+  if(t.dataset.perf){perfD=Number(t.dataset.perf);await render(false);return}
+  if(t.dataset.block){
+    const nm=t.dataset.name||'این راننده';
+    const r=await dialog({title:'مسدود کردن «'+nm+'»',text:'راننده‌ی مسدود نمی‌تواند سفر جدید ثبت کند و مسافران نمی‌توانند از او صندلی بخواهند. پرداخت بدهی برایش باز می‌ماند. دلیل در تاریخچه ثبت می‌شود.',check:'سفرهای باز و آینده‌ی او هم لغو شود',checkDefault:true,ok:'مسدود کن'});
+    if(r)after(()=>rpc('admin_block_driver',{p_driver:t.dataset.block,p_reason:r.reason,p_cancel_open:r.check}));
+    return;
+  }
+  if(t.dataset.unblock){
+    const r=await dialog({title:'آزادسازی راننده',text:'دلیل آزادسازی را بنویسید (در تاریخچه ثبت می‌شود).',ok:'آزاد کن'});
+    if(r)after(()=>rpc('admin_unblock_driver',{p_driver:t.dataset.unblock,p_reason:r.reason}));
+    return;
+  }
+  if(t.dataset.waive){
+    const r=await dialog({title:'بخشودن کمیسیون',text:'این کمیسیون دیگر از راننده گرفته نمی‌شود. دلیل در تاریخچه ثبت می‌شود.',ok:'ببخش'});
+    if(r)after(()=>rpc('admin_waive_commission',{p_commission:t.dataset.waive,p_reason:r.reason}));
+    return;
+  }
+  const adById=id=>(D['ads_'+adF]||[]).find(x=>x.id===id);
+  if(t.dataset.adf!==undefined){adF=t.dataset.adf;await render(false);return}
+  if(t.dataset.adok){after(()=>rpc('admin_ad_decide',{p_ad:t.dataset.adok,p_decision:'approve'}));return}
+  if(t.dataset.adno){
+    const r=await dialog({title:'رد تبلیغ',text:'دلیل رد برای صاحب تبلیغ نمایش داده می‌شود.',ok:'رد کن'});
+    if(r)after(()=>rpc('admin_ad_decide',{p_ad:t.dataset.adno,p_decision:'reject',p_reason:r.reason}));return;
+  }
+  if(t.dataset.addel){
+    const r=await dialog({title:'حذف تبلیغ',text:'این کار برگشت‌پذیر نیست. دلیل در تاریخچه ثبت می‌شود.',ok:'حذف کن'});
+    if(r)after(()=>rpc('admin_delete_ad',{p_ad:t.dataset.addel,p_reason:r.reason}));return;
+  }
+  if(t.dataset.adedit){
+    const x=adById(t.dataset.adedit);if(!x)return;
+    const r=await formDialog({title:'ویرایش تبلیغ',fields:[{id:'b',label:'نام کسب‌وکار',value:x.business_name},{id:'d',label:'توضیحات',type:'area',value:x.description},{id:'p',label:'شماره‌ی تماس',value:x.phone,dir:'ltr'},{id:'l',label:'لینک (https)',value:x.link||'',dir:'ltr'},{id:'ri',label:'تصویر برداشته شود',type:'check',value:false}],
+      validate:v=>v.b.length<2?'نام کسب‌وکار کوتاه است.':(v.d.length<10?'توضیحات حداقل ۱۰ حرف.':(!/^0\d{9,10}$/.test(v.p)?'شماره‌ی تماس درست نیست.':(v.l&&!/^https:\/\/\S+$/.test(v.l)?'لینک باید https باشد.':'')))});
+    if(r)after(()=>rpc('admin_update_ad',{p_ad:x.id,p_business:r.b,p_description:r.d,p_phone:r.p,p_link:r.l||null,p_remove_image:r.ri}));return;
+  }
+  if(t.dataset.adtier){
+    const x=adById(t.dataset.adtier);if(!x)return;
+    const r=await formDialog({title:'تبلیغ ویژه / پولی',fields:[{id:'t',label:'سطح',type:'select',value:x.tier,options:[['free','عادی (رایگان)'],['featured','ویژه (بالای فهرست)']]},{id:'n',label:'مدت ویژه بودن (روز؛ ۰ = بدون پایان)',type:'number',value:'30'},{id:'m',label:'مبلغ دریافتی (تومان؛ فقط ثبت دستی)',type:'number',value:String(x.paid_amount||0)}],
+      validate:v=>(!(parseInt(v.n)>=0)||!(parseInt(v.m)>=0))?'عدد معتبر وارد کنید.':''});
+    if(r){const days=parseInt(r.n)||0;after(()=>rpc('admin_set_ad_tier',{p_ad:x.id,p_tier:r.t,p_until:(r.t==='featured'&&days>0)?new Date(Date.now()+days*86400000).toISOString():null,p_paid:parseInt(r.m)||0}))}return;
+  }
+  if(t.id==='ssave'){
+    const rate=Math.round(parseFloat($('#s-rate').value)*100);
+    if(!(rate>=0&&rate<=2000)){$('#smsg').textContent=ERR.bad_rate;return}
+    if(!confirm('نرخ و تنظیمات جدید برای کمیسیون‌های بعدی اعمال شود؟'))return;
+    try{D.set=await rpc('admin_update_settings',{p_enabled:$('#s-en').checked,p_rate_bps:rate,p_min_amount:parseInt($('#s-min').value)||0,p_grace_days:parseInt($('#s-grace').value)||0});loaded={};await render(true);$('#panel').insertAdjacentHTML('afterbegin','<section class="card"><p style="color:var(--ok)" role="status">ذخیره شد.</p></section>')}
+    catch(err){$('#smsg').textContent=why(err)}
+    return;
+  }
+  if(t.id==='aigo'){
+    t.disabled=true;$('#aimsg').textContent='';$('#aibusy').hidden=false;
+    try{
+      const tk=await token();
+      await http(URL_+'/functions/v1/admin-ai-report',{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+tk,'Content-Type':'application/json'},body:JSON.stringify({days:Number($('#aid').value)})});
+      await render(false);
+    }catch(err){
+      $('#aimsg').textContent=err&&err.status===404?'تابع admin-ai-report هنوز در Supabase ساخته نشده است (راهنمای مرحله‌ی هوش مصنوعی).':why(err);
+      t.disabled=false;$('#aibusy').hidden=true;
+    }
+  }
+});
+document.addEventListener('change',async e=>{if(e.target.id==='payf'){payF=e.target.value;await render(false)}});
+/* ---------- شروع ---------- */
+function state(h){$('#state').hidden=false;$('#state').innerHTML=h;$('#panel').hidden=true;$('#tabs').hidden=true}
+async function start(){
+  if(!URL_||!KEY||SK){state('<h2>تنظیمات اتصال</h2><p class="help">فایل config.js پر نشده یا کلید آن درست نیست. کلید «secret» هرگز نباید اینجا باشد.</p>');return}
+  if(!session){state('<h2>ورود لازم است</h2><p class="help">ابتدا در سایت اصلی (بخش «حساب من») با شماره‌ی مدیر وارد شوید، سپس همین صفحه را دوباره باز کنید.</p><a href="index.html#me">رفتن به سایت</a>');return}
+  try{
+    await base();
+    $('#state').hidden=true;await render(false);
+  }catch(e){
+    const m=String(((e&&e.data)||{}).message||'');
+    if(m.indexOf('admin_phone_not_verified')>=0)state('<h2>ورود با پیامک لازم است</h2><p class="help">مدیر باید با شماره‌ی تأییدشده‌ی پیامکی وارد شده باشد. از سایت خارج و با «شماره‌ی موبایل و کد پیامکی» دوباره وارد شوید.</p><a href="index.html#me">رفتن به سایت</a>');
+    else if(m.indexOf('not_admin')>=0||(e&&e.status===403))state('<h2>این حساب مدیر نیست</h2><p class="help">برای مدیر شدن، این دستور را در Supabase ← SQL Editor اجرا کنید و بعد صفحه را دوباره باز کنید:</p><p class="mono">insert into public.app_admins(user_id) values (\''+esc(session.user&&session.user.id||'')+'\');</p>');
+    else if(e&&e.status===401)state('<h2>نشست شما تمام شده است</h2><p class="help">دوباره از سایت اصلی وارد شوید.</p><a href="index.html#me">رفتن به سایت</a>');
+    else if(e&&e.status===404)state('<h2>SQL مدیریت اجرا نشده است</h2><p class="help">فایل‌های supabase-commission.sql و سپس supabase-admin.sql را در Supabase اجرا کنید.</p>');
+    else state('<h2>خطا</h2><p class="err">'+esc(why(e))+'</p><button class="btn" type="button" onclick="location.reload()">تلاش دوباره</button>');
+  }
+}
+start();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1763 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0A585D">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<script src="config.js"></script>
+<title>هم‌سفر</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lalezar&family=Vazirmatn:wght@400;500;600;700&display=swap">
+<style>
+/* Layout concept: one teal brand band on top, boarding-ticket cards on a calm cool ground, search form overlapping the band. */
+:root{
+  --f-display:'Lalezar','Vazirmatn',Tahoma,sans-serif;
+  --f-body:'Vazirmatn',Tahoma,system-ui,sans-serif;
+  --bg:#F1F6F5;--surface:#FFFFFF;--field:#FFFFFF;--surface-2:#E6EFEE;
+  --ink:#0E2A2D;--ink-2:#456266;--line:#D0DFDE;
+  --accent:#0B7A7F;--on-accent:#FFFFFF;--accent-soft:#D6EEED;--accent-text:#075A5E;
+  --sun:#E0A100;--on-sun:#2B1E00;--sun-soft:#FBF0CF;--sun-text:#6B4A00;
+  --hero:#0A585D;--hero-ink:#F2FBFA;--hero-ink-2:#B9DCDD;--hero-chip:rgba(255,255,255,.16);
+  --err:#B3261E;--ok:#17744A;--ok-soft:#DBF2E5;
+  --ring:rgba(11,122,127,.28);--shadow:0 1px 2px rgba(14,42,45,.06),0 8px 24px rgba(14,42,45,.08);
+  --scrim:rgba(5,20,22,.55);
+  direction:rtl;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0B1A1C;--surface:#12282A;--field:#0E2123;--surface-2:#1A3336;
+  --ink:#E4F0EF;--ink-2:#9AB6B8;--line:#25423F;
+  --accent:#38BDBF;--on-accent:#04282A;--accent-soft:#143B3D;--accent-text:#7ED8D9;
+  --sun:#F0B93A;--on-sun:#2B1E00;--sun-soft:#352A0C;--sun-text:#F3D689;
+  --hero:#0E3F42;--hero-ink:#E8F6F5;--hero-ink-2:#9CC6C7;--hero-chip:rgba(255,255,255,.12);
+  --err:#FF8D84;--ok:#63D69C;--ok-soft:#10301F;
+  --ring:rgba(56,189,191,.35);--shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0B1A1C;--surface:#12282A;--field:#0E2123;--surface-2:#1A3336;
+  --ink:#E4F0EF;--ink-2:#9AB6B8;--line:#25423F;
+  --accent:#38BDBF;--on-accent:#04282A;--accent-soft:#143B3D;--accent-text:#7ED8D9;
+  --sun:#F0B93A;--on-sun:#2B1E00;--sun-soft:#352A0C;--sun-text:#F3D689;
+  --hero:#0E3F42;--hero-ink:#E8F6F5;--hero-ink-2:#9CC6C7;--hero-chip:rgba(255,255,255,.12);
+  --err:#FF8D84;--ok:#63D69C;--ok-soft:#10301F;
+  --ring:rgba(56,189,191,.35);--shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+  color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font:400 15px/1.8 var(--f-body);-webkit-text-size-adjust:100%}
+h1,h2,h3,p,dl,dd{margin:0}
+button,input,select{font:inherit;color:inherit}
+button,a,select,summary{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.hero :focus-visible{outline-color:var(--hero-ink)}
+.wrap{width:100%;max-width:1040px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+.demo-bar{background:var(--sun-soft);color:var(--sun-text);font-size:13px;line-height:1.7}
+.demo-bar .wrap{padding-block:8px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.demo-bar .short{display:none}
+.tag{background:var(--sun);color:var(--on-sun);font-weight:700;font-size:12px;padding:0 10px;border-radius:999px}
+
+.hero{background:var(--hero);color:var(--hero-ink);position:relative;overflow:hidden}
+.hero .wrap{position:relative;padding-block:14px 84px}
+.deco{position:absolute;inset:0;width:100%;height:100%;color:var(--hero-ink-2);opacity:.3;pointer-events:none}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font:400 30px/1 var(--f-display)}
+.tabs{display:none;gap:4px}
+.tabs a{padding:8px 16px;border-radius:999px;color:var(--hero-ink-2);text-decoration:none;font-weight:600;font-size:14px}
+.tabs a[aria-current="page"]{background:var(--hero-chip);color:var(--hero-ink)}
+.hero-copy{padding-top:26px;max-width:620px}
+h1{font:400 clamp(28px,6vw,44px)/1.4 var(--f-display);text-wrap:balance}
+.hero-copy p{color:var(--hero-ink-2);margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:var(--shadow)}
+.pull{margin-top:-56px;position:relative}
+.sec-gap{margin-top:16px}
+h2{font:700 18px/1.6 var(--f-body);text-wrap:balance}
+h3{font:600 15px/1.6 var(--f-body)}
+.muted{color:var(--ink-2)}
+.help{font-size:13px;color:var(--ink-2)}
+
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.lbl{font-weight:600;font-size:13.5px}
+.ghostlbl{display:none}
+.in{font-size:16px;height:48px;width:100%;border:1.5px solid var(--line);border-radius:12px;background:var(--field);color:var(--ink);padding-inline:14px}
+.in::placeholder{color:var(--ink-2);opacity:.75}
+.in:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+.in[aria-invalid="true"]{border-color:var(--err)}
+.err{color:var(--err);font-size:13px;display:flex;gap:6px;align-items:flex-start;line-height:1.7}
+.err:empty{display:none}
+.err:not(:empty)::before{content:"!";flex:none;width:16px;height:16px;border-radius:50%;background:var(--err);color:var(--bg);font-size:11px;font-weight:700;display:grid;place-items:center;margin-top:5px}
+.sel{position:relative}
+.sel select{appearance:none;-webkit-appearance:none;padding-inline-end:38px;cursor:pointer}
+.sel select:has(option[value=""]:checked){color:var(--ink-2)}
+.sel::after{content:"";position:absolute;inset-inline-end:16px;top:50%;width:8px;height:8px;border-left:2px solid var(--ink-2);border-bottom:2px solid var(--ink-2);transform:translateY(-70%) rotate(-45deg);pointer-events:none}
+select option{color:var(--ink);background:var(--surface)}
+.unit{position:relative}
+.unit .in{padding-inline-end:64px}
+.unit span{position:absolute;inset-inline-end:14px;top:50%;transform:translateY(-50%);color:var(--ink-2);font-size:13.5px;pointer-events:none}
+.stepper{display:flex;align-items:center;height:48px;width:100%;border:1.5px solid var(--line);border-radius:12px;background:var(--field);overflow:hidden}
+.stepper button{width:52px;height:100%;border:0;background:transparent;color:var(--accent-text);font:600 22px/1 var(--f-body);cursor:pointer}
+.stepper button:hover:not(:disabled){background:var(--accent-soft)}
+.stepper button:disabled{opacity:.35;cursor:not-allowed}
+.stepper output{flex:1;text-align:center;font-weight:700;font-size:17px;font-variant-numeric:tabular-nums}
+.check{display:flex;align-items:center;gap:10px;font-weight:500;cursor:pointer}
+.check input{width:22px;height:22px;accent-color:var(--accent);flex:none}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;padding-inline:22px;border-radius:12px;border:1.5px solid transparent;font-weight:600;cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn-primary{background:var(--accent);color:var(--on-accent)}
+.btn-primary:hover{filter:brightness(1.08)}
+.btn-ghost{background:transparent;color:var(--accent-text);border-color:var(--line)}
+.btn-ghost:hover{background:var(--accent-soft)}
+.btn-warn{background:transparent;color:var(--err);border-color:var(--line)}
+.btn-sm{height:44px;padding-inline:16px;font-size:14px}
+.pill{min-height:40px;border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 16px;font-weight:600;font-size:13.5px;cursor:pointer;color:var(--accent-text)}
+.pill:hover{background:var(--accent-soft)}
+
+.sform{display:grid;gap:14px 10px;grid-template-columns:minmax(0,1fr) 44px;grid-template-areas:"origin swap" "dest swap" "date date" "pax pax" "go go"}
+.a-origin{grid-area:origin}.a-dest{grid-area:dest}.a-swap{grid-area:swap;align-self:center}.a-date{grid-area:date}.a-pax{grid-area:pax}.a-go{grid-area:go}
+.swap{width:44px;height:44px;border-radius:50%;border:1.5px solid var(--line);background:var(--surface);color:var(--accent-text);display:grid;place-items:center;cursor:pointer}
+.swap:hover{background:var(--accent-soft)}
+.form-err{margin-top:12px}
+.row2{display:grid;gap:14px;grid-template-columns:minmax(0,1fr)}
+.stack{display:grid;gap:16px}
+.two{display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
+
+.res-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:28px}
+.seg{display:inline-flex;border:1.5px solid var(--line);border-radius:999px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:transparent;min-height:40px;padding:6px 16px;font-size:13.5px;font-weight:600;cursor:pointer;color:var(--ink-2)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
+.results{display:grid;gap:14px;margin-top:14px;grid-template-columns:minmax(0,1fr)}
+
+.trip{position:relative;overflow:hidden;display:grid;gap:14px;padding:16px;background:var(--surface);border:1.5px solid var(--line);border-radius:20px}
+.trip.is-sel{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+.t-top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-size:13px;padding:1px 10px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);font-weight:500;white-space:nowrap}
+.chip.seat{background:var(--accent-soft);color:var(--accent-text)}
+.chip.warn{background:var(--sun-soft);color:var(--sun-text)}
+.chip.ok{background:var(--ok-soft);color:var(--ok);font-weight:600}
+.chip.mine{background:var(--sun);color:var(--on-sun);font-weight:600}
+.route{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px}
+.pt{min-width:70px;line-height:1.5}
+.pt b{display:block;font-size:22px;font-variant-numeric:tabular-nums}
+.pt b small{font-size:12px;font-weight:500;color:var(--ink-2)}
+.pt span{font-size:13.5px;color:var(--ink-2)}
+.pt.end{text-align:end}
+.mid{display:grid;justify-items:center;gap:2px;min-width:0;text-align:center}
+.mid .dur{font-size:12.5px;color:var(--ink-2)}
+.mid .line{width:100%;height:10px;background:radial-gradient(circle,var(--accent) 4px,transparent 5px) right center/10px 10px no-repeat,radial-gradient(circle,var(--sun) 4px,transparent 5px) left center/10px 10px no-repeat;position:relative}
+.mid .line::before{content:"";position:absolute;inset-inline:8px;top:4px;border-top:2px dashed var(--ink-2);opacity:.45}
+.perf{position:relative;margin-inline:-16px;border-top:2px dashed var(--line)}
+.perf::before,.perf::after{content:"";position:absolute;top:-9px;width:16px;height:16px;border-radius:50%;background:var(--bg)}
+.perf::before{inset-inline-start:-8px}.perf::after{inset-inline-end:-8px}
+.t-foot{display:grid;gap:12px}
+.drv{display:flex;align-items:center;gap:10px;min-width:0}
+.drv small{display:block;color:var(--ink-2);font-size:13px;line-height:1.5}
+.drv strong{display:block;line-height:1.5}
+.av{flex:none;width:40px;height:40px;border-radius:50%;background:var(--accent-soft);color:var(--accent-text);display:grid;place-items:center;font-weight:700}
+.pricebox{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.price{font:400 26px/1.2 var(--f-display)}
+.price small{display:block;font:500 12.5px/1.4 var(--f-body);color:var(--ink-2)}
+
+.selbar{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:16px;padding:14px 16px;border-radius:14px;background:var(--ok-soft)}
+.selbar strong{color:var(--ok);display:block}
+.selbar span{font-size:14px}
+.selbtns{display:flex;gap:8px}
+.empty{margin-top:14px;padding:28px 18px;text-align:center;border:1.5px dashed var(--line);border-radius:20px;color:var(--ink-2);display:grid;gap:12px;justify-items:center}
+.empty h3{color:var(--ink)}
+.chiprow{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.notice{margin-top:14px;padding:12px 14px;border-radius:14px;background:var(--sun-soft);color:var(--sun-text)}
+
+.overlay{position:fixed;inset:0;background:var(--scrim);display:flex;align-items:flex-end;justify-content:center;z-index:50}
+.sheet{background:var(--surface);width:100%;max-width:580px;max-height:92%;overflow:auto;border-radius:22px 22px 0 0;padding:20px max(20px,env(safe-area-inset-right,0px)) calc(22px + env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px));display:grid;gap:16px;align-content:start}
+.sheet:focus{outline:none}
+#m-body{display:grid;gap:16px;min-width:0}
+.m-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.x{flex:none;width:40px;height:40px;border-radius:50%;border:1.5px solid var(--line);background:transparent;font-size:22px;line-height:1;cursor:pointer;color:var(--ink-2)}
+.demo-note{font-size:13px;background:var(--sun-soft);color:var(--sun-text);padding:8px 12px;border-radius:12px}
+.facts{display:grid;gap:10px 16px;grid-template-columns:repeat(2,minmax(0,1fr))}
+.facts dt{font-size:12.5px;color:var(--ink-2)}
+.facts dd{font-weight:600;line-height:1.6}
+.sumrow{display:flex;justify-content:space-between;gap:12px;align-items:baseline;padding:8px 0;border-bottom:1px dashed var(--line)}
+.sumrow.big b{font:400 24px/1.3 var(--f-display);color:var(--accent-text)}
+.lines{display:grid;gap:6px;font-size:14px}
+.lines div{display:flex;justify-content:space-between;gap:12px;padding-bottom:6px;border-bottom:1px dashed var(--line)}
+.lines .total{font-weight:700;border-bottom:0}
+.split-bar{display:flex;gap:4px;height:30px}
+.split-bar span{flex:1;border-radius:8px;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font-size:12px;font-weight:700}
+.split-bar span.d{background:var(--sun);color:var(--on-sun)}
+.legend{display:flex;gap:14px;font-size:13px;color:var(--ink-2)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--accent);margin-inline-end:6px}
+.legend i.d{background:var(--sun)}
+.done{background:var(--ok-soft);border-radius:14px;padding:14px 16px;display:grid;gap:6px}
+.done strong{color:var(--ok)}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.actions .btn{flex:1 1 150px}
+
+.big-share{font:400 38px/1.2 var(--f-display);color:var(--accent-text)}
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:8px 10px;text-align:start;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-weight:600;color:var(--ink-2);font-size:13px}
+tr.cur td{background:var(--accent-soft);font-weight:700}
+.success{display:grid;gap:12px;margin-bottom:16px;border-color:var(--ok)}
+.net{display:flex;flex-wrap:wrap;align-items:center;gap:2px 10px;margin-top:14px;padding:8px 14px;border-radius:12px;background:var(--surface-2);color:var(--ink-2);font-size:13px;line-height:1.8}
+.net.ok{background:var(--ok-soft);color:var(--ok)}
+.net.warn{background:var(--sun-soft);color:var(--sun-text)}
+.net.bad{background:var(--sun-soft);color:var(--err)}
+.card .net{margin-top:0}
+.linkbtn{border:0;background:none;color:inherit;text-decoration:underline;font-weight:600;cursor:pointer;min-height:36px;padding:0 4px}
+h3.sub{margin:14px 0 6px;color:var(--muted,#666)}
+.mytrip{border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;gap:10px;background:var(--surface)}
+.mytrip.is-off{opacity:.7}
+.req-top{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px}
+.req-top strong{margin-inline-end:auto}
+.reqs{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.req{border-top:1px dashed var(--line);padding-top:10px;display:grid;gap:8px}
+.req-sub{font-size:14px;display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center}
+.me-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.tel{color:var(--accent-text);font-weight:700;text-decoration:underline}
+.done span{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center}
+#v-me>.stack>[data-net]{margin-top:-56px;position:relative}
+#me-box>.card.pull:first-child{margin-top:0}
+.foot{padding-block:8px 24px;font-size:13px;color:var(--ink-2)}
+main.wrap{padding-block:0 120px}
+
+.dock{position:fixed;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(4,1fr);background:var(--surface);border-top:1px solid var(--line);padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px));z-index:30}
+.dock a{display:grid;justify-items:center;gap:2px;text-decoration:none;color:var(--ink-2);font-size:12px;font-weight:600;padding:4px 0}
+.dock .ic{width:56px;height:30px;border-radius:999px;display:grid;place-items:center}
+.dock a[aria-current="page"]{color:var(--accent-text)}
+.dock a[aria-current="page"] .ic{background:var(--accent-soft)}
+
+@media (max-width:639px){
+  .demo-bar .long{display:none}
+  .demo-bar .short{display:inline}
+  .demo-bar .wrap{padding-block:6px;align-items:center}
+  .hero .wrap{padding-block:8px 62px}
+  .logo{font-size:26px}
+  .hero-copy{padding-top:10px}
+  .hero-copy p{display:none}
+  h1{font-size:24px;line-height:1.5}
+  .pull{margin-top:-46px}
+  #v-me>.stack>[data-net]{margin-top:-46px}
+  .card{padding:16px}
+  .sform{gap:12px 10px;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 44px;grid-template-areas:"origin origin swap" "dest dest swap" "date date date" "pax go go"}
+  .a-go{align-self:end}
+  .stepper button{width:44px}
+  main.wrap{padding-block:0 96px}
+}
+@media (max-width:340px){
+  .stepper button{width:38px}
+  .btn{padding-inline:14px}
+}
+@media (min-width:640px){
+  .overlay{align-items:center}
+  .sheet{border-radius:22px;max-height:90%}
+  .pricebox{justify-content:flex-end}
+  .t-foot{grid-template-columns:minmax(0,1fr) auto;align-items:center}
+  .row2{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (min-width:900px){
+  .tabs{display:flex}
+  .dock{display:none}
+  main.wrap{padding-block:0 56px}
+  .sform{grid-template-columns:minmax(0,1fr) 44px minmax(0,1fr) minmax(0,1.1fr) minmax(0,.8fr) auto;grid-template-areas:"origin swap dest date pax go";align-items:start}
+  .a-swap{align-self:start}
+  .a-swap .ghostlbl,.a-go .ghostlbl{display:block;visibility:hidden}
+  .swap svg{transform:rotate(90deg)}
+  .results{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .two{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);align-items:start}
+  .two .sticky{position:sticky;top:16px}
+}
+@media (prefers-reduced-motion:no-preference){
+  .btn,.pill,.stepper button{transition:background .15s,filter .15s}
+}
+
+/* تبلیغات و معرفی کسب‌وکارها */
+.ads{margin-top:18px;display:grid;gap:14px}
+.ads-head{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.ads-head h2{font-size:19px}
+.ads-grid{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:640px){.ads-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:980px){.ads-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.ad-card{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--surface);display:flex;flex-direction:column;min-width:0}
+.ad-card.feat{border-color:var(--sun);box-shadow:0 0 0 2px var(--sun-soft)}
+.ad-img{width:100%;aspect-ratio:16/9;object-fit:cover;background:var(--surface-2);display:block}
+.ad-ph{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,var(--accent-soft),var(--surface-2));display:grid;place-items:center;font:400 34px/1 var(--f-display);color:var(--accent-text)}
+.ad-body{padding:12px 14px 14px;display:grid;gap:8px;flex:1;align-content:start}
+.ad-body h3{font-size:16px;margin:0;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.ad-body p{margin:0;color:var(--ink-2);font-size:14px;overflow-wrap:anywhere}
+.ad-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+.ad-actions .btn{height:42px;padding-inline:16px;font-size:14px}
+.chip.feat{background:var(--sun-soft);color:var(--sun-text);font-weight:700}
+.ad-dlg{border:1px solid var(--line);border-radius:20px;padding:18px;background:var(--surface);color:var(--ink);width:min(94vw,460px);max-height:92vh;direction:rtl;font:inherit}
+.ad-dlg::backdrop{background:var(--scrim)}
+.ad-dlg form{display:grid;gap:12px}
+.ad-ta{height:auto;padding:10px 14px;resize:vertical;line-height:1.8}
+.ad-file{height:auto;padding:10px}
+.ad-prev{max-width:100%;max-height:160px;border-radius:12px;object-fit:cover}
+</style>
+<style>html{padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}body{margin:0}</style>
+</head>
+<body>
+<script>document.documentElement.lang='fa';document.documentElement.dir='rtl';</script>
+<div id="app" dir="rtl" lang="fa">
+
+<div class="demo-bar"><div class="wrap"><span class="tag">نسخه آزمایشی</span><span class="long">سفرهای دارای برچسب «نمونه» واقعی نیستند. این نسخه آزمایشی است و پرداخت آنلاین ندارد.</span><span class="short">نسخه‌ی آزمایشی، بدون پرداخت.</span></div></div>
+
+<header class="hero">
+  <svg class="deco" viewBox="0 0 1000 260" preserveAspectRatio="none" aria-hidden="true"><path d="M0 200 C 220 60, 460 260, 720 110 S 1000 50 1000 50" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="6 10" vector-effect="non-scaling-stroke"/></svg>
+  <div class="wrap">
+    <div class="bar">
+      <a class="logo" href="#search" data-nav-link="search" aria-label="هم‌سفر، صفحه اصلی">
+        <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="12.5" cy="17" r="8" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="21.5" cy="17" r="8" fill="var(--sun)"/></svg>
+        <span>هم‌سفر</span>
+      </a>
+      <nav class="tabs" aria-label="بخش‌های سایت">
+        <a href="#search" data-nav="search">جست‌وجوی سفر</a>
+        <a href="#driver" data-nav="driver">ثبت سفر (راننده)</a>
+        <a href="#split" data-nav="split">تقسیم هزینه</a>
+        <a href="#me" data-nav="me">حساب من</a>
+      </nav>
+    </div>
+    <div class="hero-copy" data-copy="search">
+      <h1>هم‌مسیر پیدا کن، هزینه‌ی راه را تقسیم کن</h1>
+      <p>سفرهای بین‌شهری با خودروی شخصی. مسافر جای خالی پیدا می‌کند و راننده بخشی از هزینه‌ی راه را.</p>
+    </div>
+    <div class="hero-copy" data-copy="driver" hidden>
+      <h1>سفرت را به‌عنوان راننده ثبت کن</h1>
+      <p>مبدأ، مقصد، زمان و هزینه‌ی پیشنهادی هر نفر را وارد کن و پیش‌نمایش سفر را ببین.</p>
+    </div>
+    <div class="hero-copy" data-copy="me" hidden>
+      <h1>حساب من</h1>
+      <p>ورود، سفرهای من، درخواست‌های صندلی و تأیید یا رد مسافران.</p>
+    </div>
+    <div class="hero-copy" data-copy="split" hidden>
+      <h1>سهم هر نفر از هزینه‌ی سفر چقدر است؟</h1>
+      <p>هزینه‌ها را وارد کن تا ماشین‌حساب آن را بین راننده و مسافران تقسیم کند.</p>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- جست‌وجو -->
+<section id="v-search" data-view="search">
+  <form id="s-form" class="card pull" novalidate>
+    <div class="sform">
+      <div class="field a-origin">
+        <label class="lbl" for="s-origin">مبدأ</label>
+        <input class="in" id="s-origin" list="cities" autocomplete="off" placeholder="مثلاً تهران" aria-describedby="s-origin-err">
+        <p class="err" id="s-origin-err" aria-live="polite"></p>
+      </div>
+      <div class="field a-swap">
+        <span class="lbl ghostlbl" aria-hidden="true">.</span>
+        <button type="button" class="swap" id="s-swap" aria-label="جابه‌جایی مبدأ و مقصد">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 5v14M8 5L4 9M8 5l4 4M16 19V5M16 19l-4-4M16 19l4-4"/></svg>
+        </button>
+      </div>
+      <div class="field a-dest">
+        <label class="lbl" for="s-dest">مقصد</label>
+        <input class="in" id="s-dest" list="cities" autocomplete="off" placeholder="مثلاً اصفهان" aria-describedby="s-dest-err">
+        <p class="err" id="s-dest-err" aria-live="polite"></p>
+      </div>
+      <div class="field a-date">
+        <label class="lbl" for="s-date">تاریخ سفر</label>
+        <div class="sel"><select class="in" id="s-date" aria-describedby="s-date-err"></select></div>
+        <p class="err" id="s-date-err" aria-live="polite"></p>
+      </div>
+      <div class="field a-pax">
+        <span class="lbl" id="s-pax-lbl">تعداد مسافران</span>
+        <div class="stepper" id="s-pax" role="group" aria-labelledby="s-pax-lbl"><button type="button" data-dir="1" aria-label="یک مسافر بیشتر">+</button><output aria-live="polite">۱</output><button type="button" data-dir="-1" aria-label="یک مسافر کمتر">−</button></div>
+      </div>
+      <div class="field a-go">
+        <span class="lbl ghostlbl" aria-hidden="true">.</span>
+        <button class="btn btn-primary" type="submit">جست‌وجوی سفر</button>
+      </div>
+    </div>
+    <p class="err form-err" id="s-form-err" role="alert"></p>
+  </form>
+
+  <div data-net></div>
+  <div id="sel-strip"></div>
+
+  <div class="res-head" id="res-head">
+    <h2 id="res-title" aria-live="polite">نتایج جست‌وجو</h2>
+    <div class="seg" role="group" aria-label="مرتب‌سازی نتایج" id="sortbox">
+      <button type="button" data-sort="time" aria-pressed="true">زودترین ساعت</button>
+      <button type="button" data-sort="price" aria-pressed="false">ارزان‌ترین</button>
+    </div>
+  </div>
+  <div id="results"></div>
+
+  <!-- تبلیغات و معرفی کسب‌وکارها -->
+  <section id="ads" class="card ads" aria-labelledby="ads-h">
+    <div class="ads-head">
+      <div><h2 id="ads-h">تبلیغات و معرفی کسب‌وکارها</h2><p class="help">کسب‌وکارهای کنار مسیر سفر شما. ثبت تبلیغ فعلاً رایگان است و بعد از تأیید مدیر سایت نمایش داده می‌شود.</p></div>
+      <button class="btn btn-primary" type="button" id="ad-new">ثبت تبلیغ</button>
+    </div>
+    <p id="ads-msg" class="notice" role="status" hidden></p>
+    <div id="ads-list" class="ads-grid"></div>
+  </section>
+</section>
+
+<dialog id="ad-dlg" class="ad-dlg" aria-labelledby="ad-dlg-t">
+  <form id="ad-form" novalidate>
+    <h2 id="ad-dlg-t">ثبت تبلیغ (رایگان)</h2>
+    <p class="help">تبلیغ شما بعد از بررسی و تأیید مدیر سایت نمایش داده می‌شود.</p>
+    <div class="field"><label class="lbl" for="ad-biz">نام کسب‌وکار</label><input class="in" id="ad-biz" maxlength="60" autocomplete="organization"></div>
+    <div class="field"><label class="lbl" for="ad-contact">نام مسئول</label><input class="in" id="ad-contact" maxlength="40" autocomplete="name"><span class="help">فقط برای مدیر؛ نمایش داده نمی‌شود.</span></div>
+    <div class="field"><label class="lbl" for="ad-phone">شماره‌ی تماس</label><input class="in" id="ad-phone" inputmode="numeric" maxlength="14" dir="ltr" placeholder="09121234567" autocomplete="tel"><span class="help">این شماره در تبلیغ برای همه نمایش داده می‌شود.</span></div>
+    <div class="field"><label class="lbl" for="ad-desc">توضیحات</label><textarea class="in ad-ta" id="ad-desc" rows="4" maxlength="400"></textarea><span class="help" id="ad-desc-n">۱۰ تا ۴۰۰ حرف</span></div>
+    <div class="field"><label class="lbl" for="ad-link">لینک کسب‌وکار (اختیاری)</label><input class="in" id="ad-link" maxlength="200" inputmode="url" dir="ltr" placeholder="https://"><span class="help">فقط آدرس امن (https).</span></div>
+    <div class="field"><label class="lbl" for="ad-img">تصویر (اختیاری)</label><input class="in ad-file" id="ad-img" type="file" accept="image/jpeg,image/png,image/webp"><img id="ad-prev" class="ad-prev" alt="" hidden><span class="help">تصویر خودکار کوچک می‌شود.</span></div>
+    <p class="err form-err" id="ad-err" role="alert"></p>
+    <div class="actions"><button class="btn btn-primary" type="submit" id="ad-send">ارسال برای تأیید</button><button class="btn btn-ghost" type="button" id="ad-cancel">انصراف</button></div>
+  </form>
+</dialog>
+
+<!-- ثبت سفر راننده -->
+<section id="v-driver" data-view="driver" hidden>
+  <div class="two">
+    <div class="stack">
+      <div id="d-success" class="card success pull" hidden></div>
+      <form id="d-form" class="card pull" novalidate>
+        <div class="stack">
+          <div data-net></div>
+          <p class="notice" id="d-login-note" hidden></p>
+          <div class="row2">
+            <div class="field">
+              <label class="lbl" for="d-origin">مبدأ</label>
+              <input class="in" id="d-origin" list="cities" autocomplete="off" placeholder="مثلاً تهران" aria-describedby="d-origin-err">
+              <p class="err" id="d-origin-err" aria-live="polite"></p>
+            </div>
+            <div class="field">
+              <label class="lbl" for="d-dest">مقصد</label>
+              <input class="in" id="d-dest" list="cities" autocomplete="off" placeholder="مثلاً شیراز" aria-describedby="d-dest-err">
+              <p class="err" id="d-dest-err" aria-live="polite"></p>
+            </div>
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label class="lbl" for="d-date">تاریخ حرکت</label>
+              <div class="sel"><select class="in" id="d-date" aria-describedby="d-date-err"></select></div>
+              <p class="err" id="d-date-err" aria-live="polite"></p>
+            </div>
+            <div class="field">
+              <label class="lbl" for="d-time">ساعت حرکت</label>
+              <div class="sel"><select class="in" id="d-time" aria-describedby="d-time-err"></select></div>
+              <p class="err" id="d-time-err" aria-live="polite"></p>
+            </div>
+          </div>
+          <div class="row2">
+            <div class="field">
+              <span class="lbl" id="d-cap-lbl">ظرفیت خودرو (صندلی خالی برای مسافر)</span>
+              <div class="stepper" id="d-cap" role="group" aria-labelledby="d-cap-lbl"><button type="button" data-dir="1" aria-label="یک صندلی بیشتر">+</button><output aria-live="polite">۳</output><button type="button" data-dir="-1" aria-label="یک صندلی کمتر">−</button></div>
+              <p class="help">راننده جزو ظرفیت حساب نمی‌شود.</p>
+            </div>
+            <div class="field">
+              <label class="lbl" for="d-price">هزینه‌ی پیشنهادی هر نفر</label>
+              <div class="unit"><input class="in" id="d-price" inputmode="numeric" autocomplete="off" placeholder="مثلاً ۴۵۰٬۰۰۰" aria-describedby="d-price-err d-price-help"><span>تومان</span></div>
+              <p class="help" id="d-price-help"></p>
+              <p class="err" id="d-price-err" aria-live="polite"></p>
+            </div>
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label class="lbl" for="d-car">خودرو</label>
+              <input class="in" id="d-car" maxlength="40" autocomplete="off" placeholder="مثلاً پژو ۲۰۷ سفید" aria-describedby="d-car-err">
+              <p class="err" id="d-car-err" aria-live="polite"></p>
+            </div>
+            <div class="field">
+              <label class="lbl" for="d-meet">محل سوار شدن</label>
+              <input class="in" id="d-meet" maxlength="80" autocomplete="off" placeholder="مثلاً میدان آزادی" aria-describedby="d-meet-err">
+              <p class="err" id="d-meet-err" aria-live="polite"></p>
+            </div>
+          </div>
+          <p class="err form-err" id="d-form-err" role="alert"></p>
+          <div class="actions">
+            <button class="btn btn-primary" type="submit">ثبت سفر آزمایشی</button>
+            <button class="btn btn-ghost" type="button" id="d-fill">پر کردن با نمونه</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <aside class="card sticky" aria-label="پیش‌نمایش سفر">
+      <h2>پیش‌نمایش سفر شما</h2>
+      <p class="help">با پر کردن فرم، این کارت همان‌طور که مسافران می‌بینند به‌روز می‌شود.</p>
+      <div id="d-preview" class="sec-gap"></div>
+    </aside>
+  </div>
+</section>
+
+<!-- حساب من -->
+<section id="v-me" data-view="me" hidden>
+  <div class="stack">
+    <div data-net></div>
+    <div id="me-box" class="stack"></div>
+  </div>
+</section>
+
+<!-- تقسیم هزینه -->
+<section id="v-split" data-view="split" hidden>
+  <div class="two">
+    <form id="c-form" class="card pull" novalidate>
+      <div class="stack">
+        <div class="field">
+          <label class="lbl" for="c-preset">نمونه مسیر</label>
+          <div class="sel"><select class="in" id="c-preset"></select></div>
+          <p class="help">با انتخاب یک مسیر، هزینه‌های نمونه پر می‌شود. می‌توانی هر عددی را تغییر بدهی.</p>
+        </div>
+        <div class="field">
+          <label class="lbl" for="c-fuel">سوخت و استهلاک خودرو</label>
+          <div class="unit"><input class="in" id="c-fuel" inputmode="numeric" autocomplete="off" aria-describedby="c-fuel-err"><span>تومان</span></div>
+          <p class="err" id="c-fuel-err" aria-live="polite"></p>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label class="lbl" for="c-toll">عوارض</label>
+            <div class="unit"><input class="in" id="c-toll" inputmode="numeric" autocomplete="off" aria-describedby="c-toll-err"><span>تومان</span></div>
+            <p class="err" id="c-toll-err" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label class="lbl" for="c-other">سایر هزینه‌ها</label>
+            <div class="unit"><input class="in" id="c-other" inputmode="numeric" autocomplete="off" aria-describedby="c-other-err"><span>تومان</span></div>
+            <p class="err" id="c-other-err" aria-live="polite"></p>
+          </div>
+        </div>
+        <div class="field">
+          <span class="lbl" id="c-pax-lbl">تعداد مسافران</span>
+          <div class="stepper" id="c-pax" role="group" aria-labelledby="c-pax-lbl"><button type="button" data-dir="1" aria-label="یک مسافر بیشتر">+</button><output aria-live="polite">۳</output><button type="button" data-dir="-1" aria-label="یک مسافر کمتر">−</button></div>
+        </div>
+        <label class="check" for="c-drv"><input type="checkbox" id="c-drv" checked> راننده هم در تقسیم هزینه سهم دارد</label>
+        <p class="err form-err" id="c-form-err"></p>
+      </div>
+    </form>
+    <div class="card sticky" id="c-result" aria-live="polite"></div>
+  </div>
+</section>
+
+</main>
+
+<footer class="wrap foot">
+  هم‌سفر، نسخه‌ی آزمایشی. پرداخت آنلاین در این نسخه وجود ندارد. <span data-foot-mode></span>
+</footer>
+
+<nav class="dock" aria-label="ناوبری">
+  <a href="#search" data-nav="search"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></span>جست‌وجو</a>
+  <a href="#driver" data-nav="driver"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg></span>ثبت سفر</a>
+  <a href="#split" data-nav="split"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7.5h8M8.5 12h.01M12 12h.01M15.5 12h.01M8.5 16h.01M12 16h.01M15.5 16h.01"/></svg></span>تقسیم هزینه</a>
+  <a href="#me" data-nav="me"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4.5 4-6 8-6s7 1.5 8 6"/></svg></span>حساب من</a>
+</nav>
+
+<div class="overlay" id="modal" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="m-title" tabindex="-1"><div id="m-body"></div></div>
+</div>
+
+<datalist id="cities"></datalist>
+</div>
+<script>
+(function(){
+'use strict';
+const $=(s,r)=>(r||document).querySelector(s);
+const $$=(s,r)=>Array.from((r||document).querySelectorAll(s));
+const pad=n=>String(n).padStart(2,'0');
+const FA='۰۱۲۳۴۵۶۷۸۹';
+const toFa=s=>String(s).replace(/\d/g,d=>FA[+d]);
+const toEn=s=>String(s).replace(/[۰-۹]/g,d=>FA.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+const fmt=n=>toFa(String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g,'٬'));
+const toman=n=>fmt(n)+' تومان';
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const roundUp=(n,step)=>Math.ceil(n/step)*step;
+const STEP=5000;
+const norm=s=>toEn(String(s)).replace(/ي/g,'ی').replace(/ك/g,'ک').replace(/[‌‎‏]/g,'').replace(/\s+/g,' ').trim();
+const same=(a,b)=>norm(a)===norm(b);
+function parseMoney(raw){
+  const s=toEn(raw).replace(/[\s,٬،]/g,'');
+  if(s==='')return{empty:true};
+  if(!/^\d+$/.test(s))return{bad:true};
+  return{value:parseInt(s,10)};
+}
+function words(n){
+  let m=Math.floor(n/1e6),k=Math.round((n%1e6)/1000);
+  if(k===1000){m++;k=0}
+  const p=[];if(m)p.push(toFa(m)+' میلیون');if(k)p.push(toFa(k)+' هزار');
+  return p.length?p.join(' و ')+' تومان':toman(n);
+}
+
+/* تاریخ شمسی */
+const MONTHS=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
+const WD=['یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه','شنبه'];
+function g2j(gy,gm,gd){
+  const gdm=[0,31,59,90,120,151,181,212,243,273,304,334];
+  let jy;
+  if(gy>1600){jy=979;gy-=1600}else{jy=0;gy-=621}
+  const gy2=gm>2?gy+1:gy;
+  let days=365*gy+Math.floor((gy2+3)/4)-Math.floor((gy2+99)/100)+Math.floor((gy2+399)/400)-80+gd+gdm[gm-1];
+  jy+=33*Math.floor(days/12053);days%=12053;
+  jy+=4*Math.floor(days/1461);days%=1461;
+  if(days>365){jy+=Math.floor((days-1)/365);days=(days-1)%365}
+  const jm=days<186?1+Math.floor(days/31):7+Math.floor((days-186)/30);
+  const jd=1+(days<186?days%31:(days-186)%30);
+  return[jy,jm,jd];
+}
+const startOfDay=d=>new Date(d.getFullYear(),d.getMonth(),d.getDate());
+const TODAY=startOfDay(new Date());
+const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+const key=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const keyToDate=k=>{const p=k.split('-').map(Number);return new Date(p[0],p[1]-1,p[2])};
+function dayLabel(d,withYear){
+  const j=g2j(d.getFullYear(),d.getMonth()+1,d.getDate());
+  return WD[d.getDay()]+' '+toFa(j[2])+' '+MONTHS[j[1]-1]+(withYear?' '+toFa(j[0]):'');
+}
+function relOf(d){const n=Math.round((startOfDay(d)-TODAY)/864e5);return['امروز','فردا','پس‌فردا'][n]||''}
+const clock=m=>toFa(pad(Math.floor((m%1440)/60))+':'+pad(m%60));
+function durText(min){const h=Math.floor(min/60),m=min%60;return(h?toFa(h)+' ساعت':'')+(h&&m?' و ':'')+(m?toFa(m)+' دقیقه':'')}
+
+/* داده‌ی نمونه */
+const CITIES=['تهران','اصفهان','شیراز','مشهد','تبریز','کرج','قم','رشت','اهواز','یزد','کرمان','ساری','کاشان','همدان','اراک','قزوین','زنجان','سمنان','بندرعباس','ارومیه','اردبیل','بوشهر','شهرکرد','سنندج','کرمانشاه','گرگان','بجنورد'];
+const ROUTES=[
+  {a:'تهران',b:'اصفهان',km:440,h:5.5,toll:150000},
+  {a:'تهران',b:'رشت',km:330,h:4.5,toll:120000},
+  {a:'تهران',b:'مشهد',km:900,h:11,toll:250000},
+  {a:'شیراز',b:'اصفهان',km:480,h:6,toll:80000},
+  {a:'تهران',b:'تبریز',km:630,h:8,toll:200000},
+  {a:'تهران',b:'قم',km:150,h:2,toll:60000}
+];
+const PER_KM=3500,OTHER=50000;
+const findRoute=(a,b)=>ROUTES.find(r=>(same(r.a,a)&&same(r.b,b))||(same(r.a,b)&&same(r.b,a)));
+let uid=0;
+function costOf(r){const fuel=roundUp(r.km*PER_KM,10000);return{fuel,toll:r.toll,other:OTHER,total:fuel+r.toll+OTHER}}
+function makeTrip(o){
+  const r=findRoute(o.from,o.to);
+  const date=o.date||addDays(TODAY,o.off);
+  const t={id:o.id||('t'+(++uid)),source:o.shared?'shared':(o.mine?'local':'sample'),from:o.from,to:o.to,date,dateKey:key(date),start:o.start,cap:o.cap,free:o.free,
+    driver:o.driver,car:o.car,meet:o.meet,tags:o.tags||[],mine:!!o.mine,
+    km:r?r.km:null,dur:r?Math.round(r.h*60):null,cost:null,price:o.price||0};
+  if(r&&!o.mine&&!o.shared){t.cost=costOf(r);t.price=roundUp(t.cost.total/(o.cap+1),STEP)}
+  return t;
+}
+const T1=['بدون سیگار','یک چمدان کوچک'],T2=['بدون سیگار','توقف کوتاه برای استراحت'],T3=['چمدان متوسط مجاز'];
+function seed(){
+  const S=(from,to,off,h,m,cap,free,driver,car,meet,tags)=>makeTrip({from,to,off,start:h*60+m,cap,free,driver,car,meet,tags});
+  return[
+    S('تهران','اصفهان',1,8,0,3,2,'مهدی ر.','پژو ۲۰۷ سفید','میدان آزادی، کنار ایستگاه مترو',T1),
+    S('تهران','اصفهان',1,14,30,4,3,'سارا ک.','دنا پلاس نقره‌ای','میدان صادقیه',T2),
+    S('تهران','اصفهان',1,19,0,3,1,'امیرحسین ن.','سمند سورن مشکی','پایانه جنوب',T3),
+    S('تهران','اصفهان',2,7,30,3,3,'کیانوش ا.','تارا سفید','میدان آزادی، کنار ایستگاه مترو',T1),
+    S('اصفهان','تهران',1,16,0,3,2,'نگار ا.','تارا سفید','میدان امام حسین',T1),
+    S('اصفهان','تهران',3,9,0,4,4,'بهزاد م.','دنا پلاس سفید','میدان امام حسین',T2),
+    S('تهران','رشت',1,9,30,3,2,'پویا م.','پژو ۲۰۶ نقره‌ای','میدان صادقیه',T1),
+    S('تهران','رشت',2,17,0,4,2,'الهام ش.','رانا سفید','میدان آزادی، کنار ایستگاه مترو',T2),
+    S('رشت','تهران',2,13,0,3,3,'ماهان ج.','پژو ۲۰۷ مشکی','میدان شهرداری',T1),
+    S('تهران','مشهد',2,20,0,3,2,'رضا ب.','پژو ۲۰۶ سفید','پایانه شرق',T2),
+    S('تهران','مشهد',4,6,0,4,3,'ندا ل.','دنا پلاس نقره‌ای','پایانه شرق',T2),
+    S('شیراز','اصفهان',1,10,0,3,2,'مریم ف.','پژو ۲۰۷ سفید','میدان ستارخان',T1),
+    S('اصفهان','شیراز',3,15,30,3,1,'کیان ت.','سمند سفید','میدان امام حسین',T3),
+    S('تهران','تبریز',2,5,30,3,2,'شبنم ح.','تارا مشکی','میدان آزادی، کنار ایستگاه مترو',T1),
+    S('تبریز','تهران',3,13,0,4,3,'حمید ز.','دنا پلاس سفید','میدان ساعت',T2),
+    S('تهران','قم',1,12,0,3,2,'آیدا س.','پژو ۲۰۶ سفید','پایانه جنوب',T1),
+    S('قم','تهران',1,18,30,3,3,'سعید و.','رانا نقره‌ای','میدان امام',T3)
+  ];
+}
+
+const state={
+  trips:seed(),
+  query:{from:'تهران',to:'اصفهان',dateKey:key(addDays(TODAY,1)),pax:1,sort:'time'},
+  selected:null
+};
+
+/* ---------- ذخیره‌سازی مشترک (Supabase) ----------
+   تنظیمات از فایل config.js می‌آید. فقط «کلید عمومی» (anon یا publishable) مجاز است.
+   اگر تنظیمات خالی باشد، برنامه در «حالت محلی» کار می‌کند و سفرها فقط در همین صفحه می‌مانند. */
+const CFG=(window.HAMSAFAR_CONFIG&&typeof window.HAMSAFAR_CONFIG==='object')?window.HAMSAFAR_CONFIG:{};
+const POLL_MS=Math.min(300,Math.max(3,Number(CFG.refreshSeconds)||30))*1000;
+const REMOTE=(function(){
+  const r={on:false,url:'',key:'',problem:''};
+  const url=String(CFG.supabaseUrl||'').trim().replace(/\/+$/,'');
+  const k=String(CFG.supabaseKey||'').trim();
+  if(!url&&!k)return r;
+  if(!/^(https:\/\/[a-z0-9.-]+|http:\/\/(localhost|127\.0\.0\.1))(:\d{1,5})?$/i.test(url)){r.problem='آدرس پروژه (supabaseUrl) در config.js درست نیست. باید شبیه https://abcdxyz.supabase.co باشد.';return r}
+  if(!k){r.problem='کلید عمومی (supabaseKey) در config.js وارد نشده است.';return r}
+  const secretMsg='کلید واردشده محرمانه است (secret یا service_role) و نباید داخل سایت باشد. اتصال انجام نشد. فقط «کلید عمومی» (anon یا publishable) را در config.js بگذارید و کلید محرمانه را از جاهای دیگر هم پاک کنید.';
+  if(/^sb_secret_/i.test(k)){r.problem=secretMsg;return r}
+  const seg=k.split('.');
+  if(seg.length===3){
+    try{
+      const pl=JSON.parse(atob(seg[1].replace(/-/g,'+').replace(/_/g,'/')));
+      if(pl&&pl.role&&pl.role!=='anon'){r.problem=secretMsg;return r}
+    }catch(_){}
+  }
+  r.on=true;r.url=url;r.key=k;return r;
+})();
+const net={status:REMOTE.on?'loading':'off',last:0,loading:false,sig:'',msg:''};
+
+/* ---------- نشست ورود ----------
+   فقط «نشست» خود کاربر (توکن کوتاه‌مدت) در حافظه‌ی مرورگر می‌ماند، نه کلید محرمانه. */
+const SKEY='hamsafar_session_v1';
+let session=(function(){try{const s=JSON.parse(localStorage.getItem(SKEY)||'null');return s&&s.access_token&&s.refresh_token&&s.user&&/^[0-9a-f-]{36}$/i.test(String(s.user.id))?s:null}catch(_){return null}})();
+let profile=null;
+const mine={reqs:[],tripReqs:[],trips:[],comm:[],cinfo:null,past:[],block:null,pays:[],ads:[],loaded:false};
+function saveSession(s){session=s;try{if(s)localStorage.setItem(SKEY,JSON.stringify(s));else localStorage.removeItem(SKEY)}catch(_){}}
+function adoptSession(j){
+  if(!j||!j.access_token||!j.refresh_token||!j.user||!/^[0-9a-f-]{36}$/i.test(String(j.user.id)))throw{kind:'http',status:500,data:{}};
+  saveSession({access_token:j.access_token,refresh_token:j.refresh_token,expires_at:Math.floor(Date.now()/1000)+(Number(j.expires_in)||3600),user:{id:j.user.id}});
+}
+function clearUser(){saveSession(null);profile=null;mine.reqs=[];mine.tripReqs=[];mine.trips=[];mine.comm=[];mine.cinfo=null;mine.past=[];mine.block=null;mine.pays=[];mine.ads=[];mine.loaded=false}
+
+async function http(url,opt){
+  opt=opt||{};
+  const ctl=new AbortController();
+  const timer=setTimeout(()=>ctl.abort(),12000);
+  let res;
+  try{res=await fetch(url,{method:opt.method||'GET',headers:opt.headers||{},body:opt.body,signal:ctl.signal,cache:'no-store'})}
+  catch(_){throw{kind:'network'}}
+  finally{clearTimeout(timer)}
+  let data=null;
+  try{data=await res.json()}catch(_){}
+  if(!res.ok)throw{kind:'http',status:res.status,data:data};
+  return data;
+}
+const baseHeaders=()=>({apikey:REMOTE.key,'Content-Type':'application/json',Accept:'application/json'});
+let refreshing=null;
+async function freshToken(){
+  if(!session)return null;
+  if(session.expires_at-Math.floor(Date.now()/1000)>60)return session.access_token;
+  if(!refreshing){
+    refreshing=(async()=>{
+      try{adoptSession(await http(REMOTE.url+'/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:baseHeaders(),body:JSON.stringify({refresh_token:session.refresh_token})}))}
+      catch(e){if(e&&e.kind==='http'&&e.status>=400&&e.status<500)clearUser();throw e}
+      finally{refreshing=null}
+    })();
+  }
+  await refreshing;
+  return session?session.access_token:null;
+}
+async function rest(path,opt){
+  opt=opt||{};
+  const h={apikey:REMOTE.key,Accept:'application/json'};
+  let tok=null;
+  if(session){try{tok=await freshToken()}catch(_){tok=null}}
+  if(tok)h.Authorization='Bearer '+tok;
+  else if(REMOTE.key.split('.').length===3)h.Authorization='Bearer '+REMOTE.key;
+  if(opt.headers)Object.keys(opt.headers).forEach(k=>{h[k]=opt.headers[k]});
+  return http(REMOTE.url+'/rest/v1/'+path,{method:opt.method||'GET',headers:h,body:opt.body});
+}
+const rpc=(name,args)=>rest('rpc/'+name,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(args||{})});
+
+const ERR_TEXT={
+  login_required:'برای این کار باید وارد شوید.',
+  profile_required:'ابتدا نام و شماره‌ی موبایل خود را در بخش «حساب من» ذخیره کنید.',
+  too_many_open_trips:'حداکثر ۱۰ سفر باز می‌توانید داشته باشید. یکی را لغو کنید.',
+  own_trip:'این سفر خودتان است.',
+  not_enough_seats:'به این تعداد صندلی خالی نمانده است.',
+  already_requested:'برای این سفر قبلاً درخواست داده‌اید.',
+  already_rejected:'راننده درخواست قبلی شما را نپذیرفته است.',
+  trip_not_available:'این سفر دیگر در دسترس نیست (لغو شده یا زمانش گذشته است).',
+  already_decided:'درباره‌ی این درخواست قبلاً تصمیم گرفته شده است.',
+  not_found:'این مورد پیدا نشد یا اجازه‌ی دسترسی ندارید.',
+  too_many_requests:'همزمان بیش از ۱۰ درخواست در انتظار دارید.',
+  phone_not_verified:'برای این کار باید شماره‌ی موبایل شما با پیامک تأیید شده باشد. از «حساب من» با شماره‌ی موبایل و کد پیامکی وارد شوید.',
+  request_rate_limited:'در یک ساعت گذشته درخواست زیادی فرستاده‌اید. کمی بعد دوباره تلاش کنید.',
+  trip_daily_limit:'سقف ثبت سفر امروز شما پر شده است. فردا دوباره تلاش کنید.',
+  bad_name:'نام باید بین ۲ تا ۳۰ حرف باشد و علامت < یا > نداشته باشد.',
+  bad_phone:'شماره‌ی موبایل باید مثل ۰۹۱۲۱۲۳۴۵۶۷ باشد.',
+  bad_code:'کد باید ۶ رقم باشد.',
+  wait_a_minute:'کد را همین الان فرستاده‌ایم. یک دقیقه صبر کنید.',
+  too_many_for_phone:'برای این شماره در یک ساعت بیش از حد کد خواسته شده است. بعداً امتحان کنید.',
+  daily_limit:'سقف ارسال پیامک امروز پر شده است. فردا امتحان کنید.',
+  sms_not_configured:'سرویس پیامک هنوز در Supabase تنظیم نشده است.',
+  sms_failed:'ارسال پیامک انجام نشد. شماره را بررسی کنید و دوباره امتحان کنید.',
+  code_expired:'کدی فعال نیست یا منقضی شده است. دوباره کد بگیرید.',
+  wrong_code:'کد درست نیست.',
+  too_many_attempts:'چند بار کد اشتباه وارد شد. دوباره کد بگیرید.',
+  login_failed:'ورود انجام نشد. دوباره امتحان کنید.',
+  driver_blocked:'حساب راننده‌ی شما توسط مدیر مسدود شده و نمی‌توانید سفر جدید ثبت کنید. دلیل را در «حساب من» ببینید یا با پشتیبانی تماس بگیرید.',
+  bad_ad_business:'نام کسب‌وکار باید ۲ تا ۶۰ حرف باشد و علامت < یا > نداشته باشد.',
+  bad_ad_contact:'نام مسئول باید ۲ تا ۴۰ حرف باشد.',
+  bad_ad_phone:'شماره‌ی تماس باید با صفر شروع شود و ۱۰ یا ۱۱ رقم باشد، مثل ۰۹۱۲۱۲۳۴۵۶۷.',
+  bad_ad_description:'توضیحات باید ۱۰ تا ۴۰۰ حرف باشد و علامت < یا > نداشته باشد.',
+  bad_ad_link:'لینک باید با https:// شروع شود و فاصله نداشته باشد.',
+  bad_ad_image:'تصویر قابل قبول نیست. تصویر دیگری انتخاب کنید.',
+  too_many_pending_ads:'همزمان فقط ۳ تبلیغ در انتظار تأیید می‌توانید داشته باشید.',
+  ad_daily_limit:'در ۲۴ ساعت گذشته تبلیغ زیادی ثبت کرده‌اید. فردا دوباره تلاش کنید.',
+  ads_busy:'صف بررسی تبلیغات فعلاً پر است. بعداً تلاش کنید.',
+  duplicate_ad:'تبلیغی با همین نام کسب‌وکار از شما در انتظار یا نمایش است.',
+  commission_disabled:'سیستم کمیسیون هنوز فعال نشده است.',
+  trip_not_started:'هنوز زمان حرکت این سفر نرسیده است.',
+  no_approved_passengers:'این سفر مسافر تأییدشده نداشت، پس کمیسیونی ندارد.',
+  trip_already_completed:'برای این سفر کمیسیون ثبت شده و دیگر لغو نمی‌شود.',
+  already_paid:'کمیسیون این سفر قبلاً پرداخت شده است.',
+  not_payable:'این کمیسیون الان قابل پرداخت نیست.',
+  amount_too_small:'مبلغ این کمیسیون کمتر از حداقل درگاه است و نمی‌توان آن را آنلاین پرداخت کرد.',
+  gateway_error:'درگاه پرداخت درخواست را نپذیرفت. کمی بعد دوباره تلاش کنید.',
+  gateway_unreachable:'اتصال به درگاه پرداخت برقرار نشد. کمی بعد دوباره تلاش کنید.'
+};
+function explain(err,ctx){
+  if(!err||err.kind==='network')return 'اتصال به پایگاه داده برقرار نشد. اینترنت را بررسی کنید و دوباره تلاش کنید.';
+  const d=err.data||{},msg=String(d.message||'')+' '+String(d.hint||'')+' '+String(d.msg||'')+' '+String(d.error||'')+' '+String(d.error_description||'')+' '+String(d.error_code||''),code=String(d.code||'');
+  for(const k in ERR_TEXT){if(msg.indexOf(k)>=0)return ERR_TEXT[k]}
+  if(/anonymous_provider_disabled|anonymous sign-ins are disabled/i.test(msg))return 'ورود آزمایشی در Supabase فعال نیست. در Supabase به Authentication ← Sign In / Providers بروید و «Allow anonymous sign-ins» را روشن کنید.';
+  if(ctx==='sms'&&err.status===404)return 'تابع پیامک (sms-login) در Supabase ساخته نشده است. راهنمای قدم ۷ را ببینید.';
+  if(/jwt|refresh_token|session/i.test(msg)&&session){clearUser();return 'نشست ورود شما منقضی شد. دوباره وارد شوید.'}
+  if(/invalid api key|apikey/i.test(msg))return 'کلید عمومی Supabase درست نیست. فایل config.js را بررسی کنید.';
+  if(/too_many_trips_recently/.test(msg))return 'در چند دقیقه‌ی گذشته ثبت سفر زیاد بوده است. چند دقیقه بعد دوباره تلاش کنید.';
+  if(/trip_table_full/.test(msg))return 'ظرفیت پایگاه داده‌ی آزمایشی پر شده است.';
+  if(/row-level security/i.test(msg))return 'تاریخ یا ساعت سفر پذیرفته نشد. ممکن است ساعت دستگاه شما با ساعت سرور فرق داشته باشد.';
+  if(code==='42501'||/permission denied/i.test(msg))return 'دسترسی در Supabase فعال نیست. فایل supabase-setup.sql (نسخه‌ی ۲) را در SQL Editor اجرا کنید.';
+  if(code==='42703'||/column .* does not exist/i.test(msg))return 'جدول سفرها در Supabase هنوز نسخه‌ی قدیمی است. فایل supabase-setup.sql (نسخه‌ی ۲) را در SQL Editor اجرا کنید و Run بزنید.';
+  if(code==='PGRST205'||code==='PGRST202'||err.status===404)return 'جدول یا تابع لازم در Supabase پیدا نشد. فایل supabase-setup.sql (نسخه‌ی ۲) را در SQL Editor اجرا کنید.';
+  if(err.status===401)return 'کلید عمومی Supabase پذیرفته نشد. فایل config.js را بررسی کنید.';
+  if(err.status===429)return 'درخواست‌ها زیاد بوده است. چند دقیقه صبر کنید.';
+  if(code==='23514'||err.status===400)return 'اطلاعات پذیرفته نشد. مقدارها را بررسی کنید.';
+  if(err.status>=500)return 'سرویس پایگاه داده پاسخ نداد. چند دقیقه بعد دوباره تلاش کنید.';
+  return 'خطای ناشناخته از پایگاه داده ('+toFa(err.status||0)+').';
+}
+const SMS_LOGIN=CFG.smsLogin===true;
+async function signInAnon(){adoptSession(await http(REMOTE.url+'/auth/v1/signup',{method:'POST',headers:baseHeaders(),body:'{}'}))}
+async function smsSend(phone){return http(REMOTE.url+'/functions/v1/sms-login',{method:'POST',headers:baseHeaders(),body:JSON.stringify({action:'send',phone:phone})})}
+async function smsVerify(phone,code){
+  const r=await http(REMOTE.url+'/functions/v1/sms-login',{method:'POST',headers:baseHeaders(),body:JSON.stringify({action:'verify',phone:phone,code:code})});
+  if(!r||typeof r.token_hash!=='string')throw{kind:'http',status:500,data:{}};
+  adoptSession(await http(REMOTE.url+'/auth/v1/verify',{method:'POST',headers:baseHeaders(),body:JSON.stringify({type:'magiclink',token_hash:r.token_hash})}));
+}
+async function signOut(){
+  const tok=session&&session.access_token;
+  clearUser();
+  if(tok){try{await http(REMOTE.url+'/auth/v1/logout',{method:'POST',headers:{apikey:REMOTE.key,Authorization:'Bearer '+tok,'Content-Type':'application/json'},body:'{}'})}catch(_){}}
+}
+async function loadProfile(){
+  if(!session){profile=null;return}
+  try{
+    const rows=await rest('profiles?select=name,phone,phone_verified&id=eq.'+session.user.id);
+    profile=Array.isArray(rows)&&rows[0]?{name:rows[0].name||'',phone:rows[0].phone||'',verified:!!rows[0].phone_verified}:{name:'',phone:'',verified:false};
+  }catch(_){}
+}
+const hasProfile=()=>!!(session&&profile&&profile.name&&profile.phone&&(!SMS_LOGIN||profile.verified));
+
+const TRIP_COLS='id,origin,destination,trip_date,depart_minute,capacity,price,driver_id,driver_name,car,meet,status,seats_taken';
+function rowToTrip(r){
+  if(!r||typeof r!=='object')return null;
+  const id=String(r.id||'');
+  if(!/^[0-9a-f-]{36}$/i.test(id))return null;
+  const p=String(r.trip_date||'').split('-').map(Number);
+  if(p.length!==3||p.some(n=>!Number.isInteger(n)))return null;
+  const start=Number(r.depart_minute),cap=Number(r.capacity),price=Number(r.price),taken=Number(r.seats_taken||0);
+  if(!Number.isInteger(start)||start<0||start>1439||!Number.isInteger(cap)||cap<1||cap>6||!Number.isInteger(price)||price<0||!Number.isInteger(taken)||taken<0||taken>cap)return null;
+  const from=String(r.origin||'').trim().slice(0,40),to=String(r.destination||'').trim().slice(0,40);
+  if(!from||!to)return null;
+  const did=/^[0-9a-f-]{36}$/i.test(String(r.driver_id||''))?String(r.driver_id):'';
+  const t=makeTrip({id:id,from:from,to:to,date:new Date(p[0],p[1]-1,p[2]),start:start,cap:cap,free:cap-taken,
+    driver:toFa(String(r.driver_name||'راننده').trim().slice(0,30)||'راننده'),car:toFa(String(r.car||'').trim().slice(0,40))||'ثبت نشده',
+    meet:toFa(String(r.meet||'').trim().slice(0,80))||'با مسافران هماهنگ می‌شود',tags:[],price:price,shared:true,mine:!!(session&&did&&did===session.user.id)});
+  t.status=r.status==='cancelled'?'cancelled':'open';t.driverId=did;
+  return t;
+}
+async function loadMine(){
+  if(!session||!REMOTE.on)return;
+  const out=await Promise.all([rpc('my_requests').catch(()=>null),rpc('my_trip_requests').catch(()=>null),
+    rpc('commission_info').catch(()=>null),rpc('my_commissions').catch(()=>null),
+    rest('trips?select='+TRIP_COLS+'&driver_id=eq.'+session.user.id+'&status=eq.open&trip_date=lt.'+key(TODAY)+'&order=trip_date.desc&limit=30').catch(()=>null),rpc('my_block_status').catch(()=>null),rpc('my_payments').catch(()=>null),rpc('my_ads').catch(()=>null)]);
+  if(Array.isArray(out[0]))mine.reqs=out[0];
+  if(Array.isArray(out[1]))mine.tripReqs=out[1];
+  mine.cinfo=(out[2]&&typeof out[2]==='object'&&!Array.isArray(out[2]))?out[2]:null;
+  if(Array.isArray(out[3]))mine.comm=out[3];
+  mine.block=(out[5]&&out[5].blocked)?{reason:String(out[5].reason||'').slice(0,200)}:null;
+  mine.pays=Array.isArray(out[6])?out[6]:[];
+  mine.ads=Array.isArray(out[7])?out[7]:[];
+  mine.past=Array.isArray(out[4])?out[4].map(rowToTrip).filter(t=>t&&t.mine):[];
+  mine.loaded=true;
+}
+async function loadRemote(){
+  if(!REMOTE.on||net.loading)return;
+  net.loading=true;
+  if(!net.last)paintNet();
+  try{
+    const rows=await rest('trips?select='+TRIP_COLS+'&trip_date=gte.'+key(TODAY)+'&order=trip_date.asc,depart_minute.asc&limit=500');
+    const all=(Array.isArray(rows)?rows:[]).map(rowToTrip).filter(Boolean);
+    const list=all.filter(t=>t.status==='open');
+    mine.trips=all.filter(t=>t.mine);
+    if(session&&!profile)await loadProfile();
+    if(session)await loadMine();
+    const sig=all.map(t=>t.id+':'+t.free+':'+t.status+':'+(t.mine?1:0)).join(',')+'|'+JSON.stringify(mine.reqs)+JSON.stringify(mine.tripReqs)+JSON.stringify(mine.comm)+JSON.stringify(mine.cinfo)+mine.past.map(t=>t.id).join(',')+(mine.block?'B':'')+JSON.stringify(mine.pays)+JSON.stringify(mine.ads);
+    net.status='ok';net.last=Date.now();
+    if(sig!==net.sig){
+      net.sig=sig;
+      state.trips=state.trips.filter(t=>t.source==='sample').concat(list);
+      renderResults();
+      if(!ov.hidden&&M.t&&M.t.source==='shared'){const nt=state.trips.find(x=>x.id===M.t.id);if(nt){M.t=nt;renderModal()}}
+      if(currentView==='me')renderMe();
+    }
+  }catch(err){
+    net.status='error';net.msg=explain(err,'load');
+  }
+  net.loading=false;
+  paintNet();
+  paintAuth();
+}
+function refresh(force){
+  if(!REMOTE.on||net.loading)return;
+  if(!force&&Date.now()-net.last<5000)return;
+  loadRemote();
+}
+function paintNet(){
+  let cls='net',html='';
+  if(REMOTE.problem){cls+=' bad';html=esc(REMOTE.problem)}
+  else if(!REMOTE.on){cls+=' warn';html='حالت محلی: سفرهای ثبت‌شده فقط در همین صفحه می‌مانند و دستگاه‌های دیگر آن‌ها را نمی‌بینند.'}
+  else if(net.status==='error'){cls+=' bad';html=esc(net.msg)+' <button type="button" class="linkbtn" data-net-retry>تلاش دوباره</button>'}
+  else if(net.status==='ok'){
+    const d=new Date(net.last);
+    cls+=' ok';html='متصل به پایگاه داده‌ی مشترک. آخرین به‌روزرسانی '+clock(d.getHours()*60+d.getMinutes())+' <button type="button" class="linkbtn" data-net-retry>به‌روزرسانی</button>';
+  }
+  else html='در حال دریافت سفرها از پایگاه داده‌ی مشترک…';
+  $$('[data-net]').forEach(el=>{el.className=cls;el.innerHTML=html;el.hidden=!html});
+}
+document.addEventListener('click',e=>{if(e.target.closest('[data-net-retry]'))refresh(true)});
+
+/* مولفه‌های مشترک */
+function makeStepper(el,min,max,val,onChange){
+  const out=$('output',el),dec=$('[data-dir="-1"]',el),inc=$('[data-dir="1"]',el);
+  let v=val;
+  const paint=()=>{out.textContent=toFa(v);dec.disabled=v<=min;inc.disabled=v>=max};
+  el.addEventListener('click',e=>{
+    const b=e.target.closest('button[data-dir]');
+    if(!b||b.disabled)return;
+    v=Math.min(max,Math.max(min,v+Number(b.dataset.dir)));
+    paint();if(onChange)onChange(v);
+  });
+  paint();
+  return{get:()=>v,set:n=>{v=Math.min(max,Math.max(min,n));paint()}};
+}
+function setErr(id,msg){
+  const el=$('#'+id),p=$('#'+id+'-err');
+  if(p)p.textContent=msg||'';
+  if(el){if(msg)el.setAttribute('aria-invalid','true');else el.removeAttribute('aria-invalid')}
+}
+function applyErrors(errs,order,formErrId){
+  let first=null;
+  order.forEach(id=>{setErr(id,errs[id]||'');if(errs[id]&&!first)first=id});
+  $('#'+formErrId).textContent=first?'چند فیلد نیاز به اصلاح دارد. زیر هر فیلد توضیح داده شده است.':'';
+  if(first)$('#'+first).focus();
+  return!first;
+}
+function fillDates(sel,days){
+  let h='<option value="">انتخاب تاریخ</option>';
+  for(let i=0;i<days;i++){
+    const d=addDays(TODAY,i),rel=['امروز','فردا','پس‌فردا'][i];
+    h+='<option value="'+key(d)+'">'+(rel?rel+'، ':'')+dayLabel(d)+'</option>';
+  }
+  sel.innerHTML=h;
+}
+function fillTimes(sel){
+  let h='<option value="">انتخاب ساعت</option>';
+  for(let m=300;m<=1410;m+=30)h+='<option value="'+m+'">'+clock(m)+'</option>';
+  sel.innerHTML=h;
+}
+function moneyBlur(input){
+  input.addEventListener('blur',()=>{const r=parseMoney(input.value);if(r.value!==undefined)input.value=fmt(r.value)});
+}
+
+/* ---------- جست‌وجو ---------- */
+const sOrigin=$('#s-origin'),sDest=$('#s-dest'),sDate=$('#s-date');
+$('#cities').innerHTML=CITIES.map(c=>'<option value="'+c+'"></option>').join('');
+fillDates(sDate,30);
+const sPax=makeStepper($('#s-pax'),1,6,1);
+
+function setSearchForm(q){
+  sOrigin.value=q.from;sDest.value=q.to;sDate.value=q.dateKey;sPax.set(q.pax);
+  $$('#sortbox button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.sort===q.sort)));
+}
+setSearchForm(state.query);
+
+$('#s-swap').addEventListener('click',()=>{const a=sOrigin.value;sOrigin.value=sDest.value;sDest.value=a;setErr('s-origin','');setErr('s-dest','')});
+['s-origin','s-dest','d-origin','d-dest'].forEach(id=>$('#'+id).addEventListener('focus',e=>{const t=e.target;setTimeout(()=>{if(document.activeElement===t){try{t.select()}catch(_){}}},0)}));
+['s-origin','s-dest','s-date'].forEach(id=>$('#'+id).addEventListener('input',()=>{setErr(id,'');$('#s-form-err').textContent=''}));
+
+$('#s-form').addEventListener('submit',e=>{
+  e.preventDefault();
+  const from=sOrigin.value.trim(),to=sDest.value.trim(),dk=sDate.value,errs={};
+  if(!from)errs['s-origin']='مبدأ را وارد کنید.';
+  if(!to)errs['s-dest']='مقصد را وارد کنید.';
+  else if(from&&same(from,to))errs['s-dest']='مبدأ و مقصد نباید یکسان باشند.';
+  if(!dk)errs['s-date']='تاریخ سفر را انتخاب کنید.';
+  if(!applyErrors(errs,['s-origin','s-dest','s-date'],'s-form-err'))return;
+  state.query={from,to,dateKey:dk,pax:sPax.get(),sort:state.query.sort};
+  renderResults();
+  refresh(true);
+  const h=$('#res-head');
+  if(h)h.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+});
+$('#sortbox').addEventListener('click',e=>{
+  const b=e.target.closest('button[data-sort]');if(!b)return;
+  state.query.sort=b.dataset.sort;
+  $$('#sortbox button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+  renderResults();
+});
+
+function lev(a,b){
+  if(Math.abs(a.length-b.length)>1)return 9;
+  const d=[];for(let i=0;i<=a.length;i++){d[i]=[i]}
+  for(let j=1;j<=b.length;j++)d[0][j]=j;
+  for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));
+  return d[a.length][b.length];
+}
+function nearCity(raw){
+  const q=norm(raw);
+  if(q.length<2||CITIES.some(c=>norm(c)===q))return null;
+  let best=null;
+  CITIES.forEach(c=>{
+    const n=norm(c);let s=0;
+    if(n.startsWith(q)||q.startsWith(n))s=3;else if(n.includes(q)||q.includes(n))s=2;else if(lev(n,q)<=1)s=1;
+    if(s&&(!best||s>best.s))best={c,s};
+  });
+  return best?best.c:null;
+}
+function tripCard(t){
+  const rel=relOf(t.date);
+  const arrM=t.dur!=null?t.start+t.dur:null;
+  const sel=state.selected&&state.selected.id===t.id;
+  const seats=t.free===1?'<span class="chip warn">فقط ۱ صندلی خالی</span>':'<span class="chip seat">'+toFa(t.free)+' صندلی خالی</span>';
+  return '<article class="trip'+(sel?' is-sel':'')+'">'+
+    '<div class="t-top"><span class="chip">'+(rel?rel+'، ':'')+dayLabel(t.date)+'</span><span class="chips">'+
+      (t.mine?'<span class="chip mine">ثبت‌شده توسط شما</span>':(t.source==='shared'?'<span class="chip">ثبت‌شده توسط کاربر</span>':(t.source==='sample'?'<span class="chip">نمونه</span>':'')))+(sel?'<span class="chip ok">انتخاب‌شده</span>':'')+seats+'</span></div>'+
+    '<div class="route">'+
+      '<div class="pt"><b>'+clock(t.start)+'</b><span>'+esc(t.from)+'</span></div>'+
+      '<div class="mid"><span class="dur">'+(t.dur!=null?durText(t.dur):'مدت نامشخص')+'</span><span class="line"></span><span class="dur">'+(t.km?toFa(t.km)+' کیلومتر':'&nbsp;')+'</span></div>'+
+      '<div class="pt end"><b>'+(arrM!=null?'<small>حدود</small> '+clock(arrM):'—')+'</b><span>'+esc(t.to)+(arrM!=null&&arrM>=1440?'، روز بعد':'')+'</span></div>'+
+    '</div>'+
+    '<div class="perf" aria-hidden="true"></div>'+
+    '<div class="t-foot">'+
+      '<div class="drv"><span class="av" aria-hidden="true">'+esc(t.driver.trim().charAt(0))+'</span><div><strong>'+esc(t.driver)+'</strong><small>'+esc(t.source==='shared'&&t.car==='ثبت نشده'?'ثبت‌شده توسط کاربر':t.car)+'</small></div></div>'+
+      '<div class="pricebox"><div class="price">'+fmt(t.price)+'<small>تومان برای هر نفر</small></div>'+
+      '<button class="btn btn-primary btn-sm" type="button" data-open="'+t.id+'">جزئیات و انتخاب</button></div>'+
+    '</div></article>';
+}
+
+function renderResults(){
+  const q=state.query,box=$('#results'),title=$('#res-title');
+  const sorter=(a,b)=>q.sort==='price'?(a.price-b.price)||a.dateKey.localeCompare(b.dateKey)||(a.start-b.start):a.dateKey.localeCompare(b.dateKey)||(a.start-b.start);
+  const route=state.trips.filter(t=>same(t.from,q.from)&&same(t.to,q.to));
+  const dObj=keyToDate(q.dateKey),dl=(relOf(dObj)?relOf(dObj)+'، ':'')+dayLabel(dObj);
+  const exact=route.filter(t=>t.dateKey===q.dateKey&&t.free>=q.pax).sort(sorter);
+  $('#sortbox').hidden=!route.length;
+  if(exact.length){
+    title.textContent=toFa(exact.length)+' سفر از '+q.from+' به '+q.to+'، '+dl;
+    box.innerHTML='<div class="results">'+exact.map(tripCard).join('')+'</div>';
+  }else if(route.length){
+    const sameDay=route.some(t=>t.dateKey===q.dateKey);
+    const alts=route.filter(t=>t.free>=q.pax&&t.dateKey!==q.dateKey).sort(sorter);
+    const list=alts.length?alts:route.slice().sort(sorter);
+    title.textContent='سفرهای نزدیک در همین مسیر';
+    const msg=sameDay?'برای '+toFa(q.pax)+' مسافر در '+dl+' ظرفیت کافی پیدا نشد.':'در '+dl+' سفری در مسیر '+q.from+' ← '+q.to+' پیدا نشد.';
+    box.innerHTML='<p class="notice">'+esc(msg)+(alts.length?' سفرهای دیگر همین مسیر را ببینید:':' ظرفیت سفرهای زیر کمتر از تعداد مسافران شماست.')+'</p><div class="results">'+list.map(tripCard).join('')+'</div>';
+  }else{
+    title.textContent='سفری پیدا نشد';
+    const combos=[];
+    state.trips.forEach(t=>{const k=t.from+'|'+t.to;if(!combos.includes(k))combos.push(k)});
+    const fixes=[['from',nearCity(q.from)],['to',nearCity(q.to)]].filter(x=>x[1]);
+    const fixHtml=fixes.length?'<div class="chiprow">'+fixes.map(x=>'<button type="button" class="pill" data-fix="'+x[0]+'|'+esc(x[1])+'">منظورتان «'+esc(x[1])+'» بود؟</button>').join('')+'</div>':'';
+    box.innerHTML='<div class="empty"><h3>برای '+esc(q.from)+' ← '+esc(q.to)+' سفری پیدا نشد</h3>'+fixHtml+
+      '<p>مسیرهایی که الان سفر دارند:</p>'+
+      '<div class="chiprow">'+combos.map(k=>{const p=k.split('|');return'<button type="button" class="pill" data-demo-route="'+esc(k)+'">'+esc(p[0])+' ← '+esc(p[1])+'</button>'}).join('')+'</div>'+
+      '<button type="button" class="btn btn-ghost btn-sm" data-to-driver>این مسیر را به‌عنوان راننده ثبت کن</button></div>';
+  }
+  renderSel();
+}
+
+function renderSel(){
+  const box=$('#sel-strip'),s=state.selected;
+  if(!s){box.innerHTML='';return}
+  const t=state.trips.find(x=>x.id===s.id);
+  if(!t){box.innerHTML='';return}
+  box.innerHTML='<div class="selbar"><div><strong>سفر انتخابی شما (آزمایشی)</strong><span>'+esc(t.from)+' ← '+esc(t.to)+'، '+dayLabel(t.date)+' ساعت '+clock(t.start)+'، '+toFa(s.pax)+' مسافر، سهم شما '+toman(t.price*s.pax)+'</span></div>'+
+    '<div class="selbtns"><button class="btn btn-ghost btn-sm" type="button" data-sel-open="'+t.id+'">جزئیات</button><button class="btn btn-warn btn-sm" type="button" data-sel-cancel>لغو انتخاب</button></div></div>';
+}
+
+$('#sel-strip').addEventListener('click',e=>{
+  const o=e.target.closest('[data-sel-open]');
+  if(o){openTrip(o.dataset.selOpen);return}
+  if(e.target.closest('[data-sel-cancel]')){state.selected=null;renderResults()}
+});
+$('#results').addEventListener('click',e=>{
+  const o=e.target.closest('[data-open]');
+  if(o){openTrip(o.dataset.open);return}
+  const fx=e.target.closest('[data-fix]');
+  if(fx){
+    const p=fx.dataset.fix.split('|');
+    state.query[p[0]]=p[1];setSearchForm(state.query);renderResults();return;
+  }
+  const r=e.target.closest('[data-demo-route]');
+  if(r){
+    const p=r.dataset.demoRoute.split('|');
+    const first=state.trips.filter(t=>t.from===p[0]&&t.to===p[1]).sort((a,b)=>a.dateKey.localeCompare(b.dateKey)||a.start-b.start)[0];
+    state.query={from:p[0],to:p[1],dateKey:first?first.dateKey:state.query.dateKey,pax:1,sort:'time'};
+    setSearchForm(state.query);renderResults();return;
+  }
+  if(e.target.closest('[data-to-driver]')){
+    $('#d-origin').value=state.query.from;$('#d-dest').value=state.query.to;
+    renderPreview();go('driver');
+  }
+});
+
+/* ---------- پنجره‌ی جزئیات سفر ---------- */
+const ov=$('#modal'),sheet=$('.sheet',ov),mbody=$('#m-body');
+const M={t:null,pax:1,stepper:null,msg:'',busy:false};
+
+function sumHTML(){
+  const t=M.t;
+  return '<div class="sumrow"><span>هزینه‌ی هر نفر</span><b>'+toman(t.price)+'</b></div>'+
+    '<div class="sumrow big"><span>سهم شما برای '+toFa(M.pax)+' مسافر</span><b>'+toman(t.price*M.pax)+'</b></div>';
+}
+function costHTML(t){
+  if(!t.cost){
+    return '<h3>تقسیم هزینه</h3><p class="help">با ظرفیت کامل، مجموع سهم مسافران '+toman(t.price*t.cap)+' می‌شود. جزئیات هزینه‌ی این سفر را راننده مشخص نکرده است.</p>';
+  }
+  const c=t.cost,people=t.cap+1;
+  let bar='<span class="d" title="راننده">ر</span>';
+  for(let i=1;i<=t.cap;i++)bar+='<span>'+toFa(i)+'</span>';
+  return '<h3>این مبلغ از کجا می‌آید؟ (محاسبه‌ی نمونه)</h3>'+
+    '<div class="lines"><div><span>سوخت و استهلاک</span><span>'+toman(c.fuel)+'</span></div><div><span>عوارض</span><span>'+toman(c.toll)+'</span></div><div><span>سایر هزینه‌ها</span><span>'+toman(c.other)+'</span></div><div class="total"><span>جمع هزینه‌ی سفر</span><span>'+toman(c.total)+'</span></div></div>'+
+    '<div class="split-bar" aria-hidden="true">'+bar+'</div>'+
+    '<div class="legend"><span><i class="d"></i>راننده</span><span><i></i>مسافران</span></div>'+
+    '<p class="help">هزینه بین راننده و '+toFa(t.cap)+' مسافر ('+toFa(people)+' نفر) تقسیم شده است: '+toman(c.total)+' ÷ '+toFa(people)+' و رو به بالا گرد شده تا ۵٬۰۰۰ تومان.</p>'+
+    '<button class="btn btn-ghost btn-sm" type="button" data-to-calc>بازکردن در ماشین‌حساب تقسیم هزینه</button>';
+}
+const myReq=t=>mine.reqs.find(r=>r.trip_id===t.id);
+function canRequest(t){
+  if(t.mine||t.free<1)return false;
+  const r=myReq(t);
+  return !(r&&(r.status==='pending'||r.status==='approved'||r.status==='rejected'));
+}
+function sharedStatusHTML(t){
+  const r=myReq(t);
+  if(t.mine)return '<p class="notice">این سفر خودتان است. درخواست‌های مسافران را در «حساب من» ببینید.</p>';
+  if(r&&r.status==='pending')return '<div class="done"><strong>درخواست شما برای راننده فرستاده شد</strong><span>منتظر تأیید راننده بمانید. وضعیت در «حساب من» به‌روز می‌شود.</span></div>';
+  if(r&&r.status==='approved')return '<div class="done"><strong>راننده درخواست شما را تأیید کرد</strong><span>راننده: '+esc(toFa(r.driver_name||'—'))+(r.car?'، '+esc(toFa(r.car)):'')+'</span><span>محل سوار شدن: '+esc(toFa(r.meet||'با راننده هماهنگ کنید'))+'</span><span>شماره‌ی راننده: '+phoneHTML(r.driver_phone,r.driver_verified)+'</span></div>';
+  if(r&&r.status==='rejected')return '<p class="notice">راننده درخواست شما را نپذیرفته است.</p>';
+  return '<p class="notice">صندلی خالی برای این سفر نمانده است.</p>';
+}
+function renderModal(){
+  const t=M.t,sel=state.selected&&state.selected.id===t.id;
+  const arr=t.dur!=null?clock(t.start+t.dur)+(t.start+t.dur>=1440?' (روز بعد)':''):'نامشخص';
+  let h='<div class="m-head"><div><h2 id="m-title">'+esc(t.from)+' ← '+esc(t.to)+'</h2><p class="muted">'+(relOf(t.date)?relOf(t.date)+'، ':'')+dayLabel(t.date,true)+'، ساعت '+clock(t.start)+'</p></div>'+
+    '<button class="x" type="button" data-close aria-label="بستن">×</button></div>'+
+    '<p class="demo-note">'+(t.source==='shared'?'این سفر را یکی از کاربران ثبت کرده است. با «درخواست صندلی» پیام شما برای راننده می‌رود و شماره‌ی راننده فقط بعد از تأیید او نشان داده می‌شود. پرداختی انجام نمی‌شود.':(t.source==='local'?'این سفر را شما در همین صفحه ثبت کرده‌اید و فقط روی همین دستگاه دیده می‌شود.':'این یک سفر نمونه است. راننده و خودرو واقعی نیستند.'))+'</p>'+
+    '<dl class="facts"><div><dt>راننده</dt><dd>'+esc(t.driver)+'</dd></div><div><dt>خودرو</dt><dd>'+esc(t.car)+'</dd></div>'+
+    '<div><dt>محل سوار شدن</dt><dd>'+esc(t.meet)+'</dd></div><div><dt>رسیدن تقریبی</dt><dd>'+arr+'</dd></div>'+
+    '<div><dt>مسافت</dt><dd>'+(t.km?toFa(t.km)+' کیلومتر':'نامشخص')+'</dd></div><div><dt>صندلی خالی</dt><dd>'+toFa(t.free)+' از '+toFa(t.cap)+'</dd></div></dl>';
+  if(t.tags.length)h+='<div class="chips">'+t.tags.map(x=>'<span class="chip">'+esc(x)+'</span>').join('')+'</div>';
+  if(sel){
+    h+='<div class="done" id="m-done" tabindex="-1"><strong>سفر برای آزمایش انتخاب شد</strong><span>'+toFa(state.selected.pax)+' مسافر × '+toman(t.price)+' = '+toman(t.price*state.selected.pax)+'</span>'+
+      '<span class="help">با راننده تماسی گرفته نشد، پیامکی فرستاده نشد و پرداختی انجام نشد.</span></div>'+
+      '<div class="actions"><button class="btn btn-primary" type="button" data-close>بستن</button><button class="btn btn-warn" type="button" data-unpick>لغو انتخاب</button></div>';
+  }else if(t.source==='shared'&&(t.mine||!canRequest(t))){
+    h+=sharedStatusHTML(t)+'<div class="actions"><button class="btn btn-primary" type="button" data-close>بستن</button>'+(t.mine?'<button class="btn btn-ghost" type="button" data-goto-me="">سفرهای من</button>':'')+'</div>';
+  }else{
+    h+='<div class="field"><span class="lbl" id="m-pax-lbl">تعداد مسافران</span><div class="stepper" id="m-pax" role="group" aria-labelledby="m-pax-lbl"><button type="button" data-dir="1" aria-label="یک مسافر بیشتر">+</button><output aria-live="polite">۱</output><button type="button" data-dir="-1" aria-label="یک مسافر کمتر">−</button></div></div>'+
+      '<div id="m-sum"></div>'+costHTML(t)+
+      (M.msg?'<p class="'+(M.msgOk?'help':'err form-err')+'" role="alert">'+esc(M.msg)+'</p>':'')+
+      (t.source==='shared'?'<div class="actions"><button class="btn btn-primary" type="button" data-request'+(M.busy?' disabled':'')+'>درخواست صندلی</button><button class="btn btn-ghost" type="button" data-close>بازگشت به نتایج</button></div>':
+      '<div class="actions"><button class="btn btn-primary" type="button" data-pick>انتخاب این سفر</button><button class="btn btn-ghost" type="button" data-close>بازگشت به نتایج</button></div>');
+  }
+  mbody.innerHTML=h;
+  if(!sel&&!(t.source==='shared'&&(t.mine||!canRequest(t)))){
+    M.stepper=makeStepper($('#m-pax'),1,Math.max(1,t.free),M.pax,v=>{M.pax=v;$('#m-sum').innerHTML=sumHTML()});
+    $('#m-sum').innerHTML=sumHTML();
+  }
+}
+function openTrip(id){
+  const t=state.trips.find(x=>x.id===id);if(!t)return;
+  M.t=t;M.msg='';M.msgOk=false;M.busy=false;
+  const prev=state.selected&&state.selected.id===id?state.selected.pax:state.query.pax;
+  M.pax=Math.max(1,Math.min(prev,t.free));
+  renderModal();
+  ov.hidden=false;document.body.style.overflow='hidden';sheet.scrollTop=0;sheet.focus();
+}
+function closeModal(){
+  if(ov.hidden)return;
+  const id=M.t&&M.t.id;
+  ov.hidden=true;document.body.style.overflow='';
+  const b=id&&($('[data-open="'+id+'"]')||$('[data-sel-open="'+id+'"]'));
+  if(b)b.focus();
+}
+ov.addEventListener('click',e=>{
+  if(e.target===ov||e.target.closest('[data-close]')){closeModal();return}
+  if(e.target.closest('[data-pick]')){
+    state.selected={id:M.t.id,pax:M.pax};
+    renderModal();renderResults();
+    const d=$('#m-done');if(d)d.focus();return;
+  }
+  if(e.target.closest('[data-request]')){
+    if(M.busy)return;
+    if(!hasProfile()){meUi.next='search';meUi.reopen=M.t.id;go('me');return}
+    const tid=M.t.id,pax=M.pax;
+    M.busy=true;M.msg='';renderModal();
+    rpc('request_seat',{p_trip:tid,p_seats:pax}).then(()=>reloadNow()).then(()=>{M.busy=false;if(!ov.hidden&&M.t&&M.t.id===tid){const nt=state.trips.find(x=>x.id===tid);if(nt)M.t=nt;renderModal()}})
+      .catch(err=>{M.busy=false;M.msg=explain(err,'req');M.msgOk=false;if(!ov.hidden)renderModal()});
+    return;
+  }
+  if(e.target.closest('[data-unpick]')){state.selected=null;renderModal();renderResults();return}
+  if(e.target.closest('[data-to-calc]')){
+    const c=M.t.cost;
+    loadCalc({fuel:c.fuel,toll:c.toll,other:c.other,pax:M.t.cap,preset:''});
+    closeModal();go('split');
+  }
+});
+document.addEventListener('keydown',e=>{
+  if(ov.hidden)return;
+  if(e.key==='Escape'){closeModal();return}
+  if(e.key==='Tab'){
+    const f=$$('button:not(:disabled),[href],input,select,[tabindex]:not([tabindex="-1"])',sheet).filter(x=>x.offsetParent!==null);
+    if(!f.length)return;
+    const a=f[0],z=f[f.length-1];
+    if(e.shiftKey&&(document.activeElement===a||document.activeElement===sheet)){e.preventDefault();z.focus()}
+    else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus()}
+  }
+});
+
+/* ---------- ثبت سفر راننده ---------- */
+const dOrigin=$('#d-origin'),dDest=$('#d-dest'),dDate=$('#d-date'),dTime=$('#d-time'),dPrice=$('#d-price'),dCar=$('#d-car'),dMeet=$('#d-meet');
+fillDates(dDate,30);fillTimes(dTime);
+const dCap=makeStepper($('#d-cap'),1,6,3,()=>renderPreview());
+moneyBlur(dPrice);
+let lastCreated=null;
+
+function priceCheck(){
+  const r=parseMoney(dPrice.value);
+  if(r.empty)return{err:'هزینه‌ی پیشنهادی هر نفر را وارد کنید.'};
+  if(r.bad)return{err:'فقط عدد وارد کنید. مثلاً ۴۵۰۰۰۰ یا ۴۵۰٬۰۰۰.'};
+  if(r.value<10000)return{err:'حداقل هزینه ۱۰٬۰۰۰ تومان است.'};
+  if(r.value>5000000)return{err:'مبلغ خیلی زیاد است. حداکثر ۵٬۰۰۰٬۰۰۰ تومان.'};
+  return{value:r.value};
+}
+function renderPreview(){
+  const from=dOrigin.value.trim(),to=dDest.value.trim(),dk=dDate.value,tm=dTime.value;
+  const r=from&&to?findRoute(from,to):null;
+  const pr=parseMoney(dPrice.value);
+  const price=pr.value!==undefined?pr.value:null;
+  const cap=dCap.get();
+  $('#d-price-help').textContent=price&&price>=10000?'برابر با '+words(price):'';
+  const dObj=dk?keyToDate(dk):null;
+  const start=tm?Number(tm):null;
+  const arr=r&&start!=null?clock(start+Math.round(r.h*60)):null;
+  $('#d-preview').innerHTML='<article class="trip">'+
+    '<div class="t-top"><span class="chip">'+(dObj?(relOf(dObj)?relOf(dObj)+'، ':'')+dayLabel(dObj):'تاریخ انتخاب نشده')+'</span><span class="chip seat">'+toFa(cap)+' صندلی خالی</span></div>'+
+    '<div class="route"><div class="pt"><b>'+(start!=null?clock(start):'—')+'</b><span>'+(from?esc(from):'مبدأ')+'</span></div>'+
+    '<div class="mid"><span class="dur">'+(r?durText(Math.round(r.h*60)):'مدت نامشخص')+'</span><span class="line"></span><span class="dur">'+(r?toFa(r.km)+' کیلومتر':'&nbsp;')+'</span></div>'+
+    '<div class="pt end"><b>'+(arr?'<small>حدود</small> '+arr:'—')+'</b><span>'+(to?esc(to):'مقصد')+'</span></div></div>'+
+    '<div class="perf" aria-hidden="true"></div>'+
+    '<div class="pricebox"><div class="price">'+(price?fmt(price):'—')+'<small>تومان برای هر نفر</small></div></div>'+
+    '<p class="help">'+(price?'با ظرفیت کامل، مجموع سهم مسافران '+toman(price*cap)+' می‌شود.':'هزینه‌ی هر نفر را وارد کنید.')+'</p></article>';
+}
+['d-origin','d-dest','d-date','d-time','d-price','d-car','d-meet'].forEach(id=>{
+  const el=$('#'+id);
+  const h=()=>{setErr(id,'');$('#d-form-err').textContent='';renderPreview()};
+  el.addEventListener('input',h);el.addEventListener('change',h);
+});
+
+$('#d-fill').addEventListener('click',()=>{
+  dOrigin.value='تهران';dDest.value='اصفهان';dDate.value=key(addDays(TODAY,3));dTime.value=String(9*60);
+  dCap.set(3);dPrice.value=fmt(450000);dCar.value='پژو ۲۰۷ سفید';dMeet.value='میدان آزادی';
+  ['d-origin','d-dest','d-date','d-time','d-price','d-car','d-meet'].forEach(id=>setErr(id,''));
+  $('#d-form-err').textContent='';renderPreview();
+});
+
+let saving=false;
+$('#d-form').addEventListener('submit',async e=>{
+  e.preventDefault();
+  if(saving)return;
+  const from=dOrigin.value.trim(),to=dDest.value.trim(),dk=dDate.value,tm=dTime.value,errs={};
+  const markup=s=>/[<>]/.test(s);
+  if(!from)errs['d-origin']='مبدأ را وارد کنید.';
+  else if(from.length<2||from.length>40)errs['d-origin']='نام مبدأ باید بین ۲ تا ۴۰ حرف باشد.';
+  else if(markup(from))errs['d-origin']='نام مبدأ نباید شامل علامت < یا > باشد.';
+  if(!to)errs['d-dest']='مقصد را وارد کنید.';
+  else if(to.length<2||to.length>40)errs['d-dest']='نام مقصد باید بین ۲ تا ۴۰ حرف باشد.';
+  else if(markup(to))errs['d-dest']='نام مقصد نباید شامل علامت < یا > باشد.';
+  else if(from&&same(from,to))errs['d-dest']='مبدأ و مقصد نباید یکسان باشند.';
+  if(!dk)errs['d-date']='تاریخ حرکت را انتخاب کنید.';
+  if(!tm)errs['d-time']='ساعت حرکت را انتخاب کنید.';
+  else if(dk===key(TODAY)){const n=new Date();if(Number(tm)<=n.getHours()*60+n.getMinutes())errs['d-time']='این ساعت گذشته است. ساعت دیگری انتخاب کنید.'}
+  const pc=priceCheck();
+  if(pc.err)errs['d-price']=pc.err;
+  const car=norm(dCar.value).replace(/\s+/g,' '),meet=norm(dMeet.value).replace(/\s+/g,' ');
+  if(!car)errs['d-car']='نام و رنگ خودرو را وارد کنید.';
+  else if(car.length<2||car.length>40)errs['d-car']='نام خودرو باید بین ۲ تا ۴۰ حرف باشد.';
+  else if(markup(car))errs['d-car']='نام خودرو نباید شامل علامت < یا > باشد.';
+  if(!meet)errs['d-meet']='محل سوار شدن را وارد کنید.';
+  else if(meet.length<2||meet.length>80)errs['d-meet']='محل سوار شدن باید بین ۲ تا ۸۰ حرف باشد.';
+  else if(markup(meet))errs['d-meet']='محل سوار شدن نباید شامل علامت < یا > باشد.';
+  if(!applyErrors(errs,['d-origin','d-dest','d-date','d-time','d-price','d-car','d-meet'],'d-form-err'))return;
+  if(REMOTE.problem){$('#d-form-err').textContent='ثبت سفر انجام نشد. '+REMOTE.problem;return}
+  if(REMOTE.on&&!hasProfile()){$('#d-form-err').textContent='برای ثبت سفر ابتدا وارد شوید و نام و شماره‌ی خود را در «حساب من» ذخیره کنید.';paintAuth();return}
+  let t;
+  if(REMOTE.on){
+    const btn=$('#d-form button[type=submit]'),label=btn.textContent;
+    saving=true;btn.disabled=true;btn.textContent='در حال ذخیره…';
+    try{
+      const rows=await rest('trips',{method:'POST',headers:{'Content-Type':'application/json',Prefer:'return=representation'},
+        body:JSON.stringify({origin:norm(from),destination:norm(to),trip_date:dk,depart_minute:Number(tm),capacity:dCap.get(),price:pc.value,car:car,meet:meet})});
+      t=rowToTrip(Array.isArray(rows)?rows[0]:rows);
+      if(!t)throw{kind:'http',status:500,data:{}};
+    }catch(err){
+      saving=false;btn.disabled=false;btn.textContent=label;
+      $('#d-form-err').textContent=explain(err,'save')+' سفر ذخیره نشد.';
+      return;
+    }
+    saving=false;btn.disabled=false;btn.textContent=label;
+    t.mine=true;
+    state.trips=state.trips.filter(x=>x.id!==t.id);state.trips.push(t);
+    refresh(true);
+  }else{
+    t=makeTrip({from,to,date:keyToDate(dk),start:Number(tm),cap:dCap.get(),free:dCap.get(),driver:'شما (آزمایشی)',car:car,meet:meet,tags:[],price:pc.value,mine:true});
+    state.trips.push(t);
+  }
+  lastCreated=t;
+  const box=$('#d-success');
+  box.innerHTML='<h2>سفر شما ثبت شد</h2><p>'+esc(from)+' ← '+esc(to)+'، '+dayLabel(t.date)+' ساعت '+clock(t.start)+'، '+toFa(t.cap)+' صندلی خالی، '+toman(t.price)+' برای هر نفر.</p>'+
+    '<p class="help">'+(REMOTE.on?'سفر در پایگاه داده‌ی مشترک ذخیره شد و کاربران دیگر آن را در جست‌وجو می‌بینند. وقتی مسافری صندلی بخواهد، در «حساب من» می‌توانید تأیید یا رد کنید. شماره‌ی شما فقط بعد از تأیید به مسافر نشان داده می‌شود.':'این سفر فقط در همین صفحه دیده می‌شود و تا بسته شدن صفحه می‌ماند. به کسی اطلاع داده نشد.')+'</p>'+
+    '<div class="actions"><button class="btn btn-primary" type="button" data-see>دیدن در نتایج جست‌وجو</button><button class="btn btn-ghost" type="button" data-another>ثبت سفر دیگر</button></div>';
+  box.hidden=false;box.setAttribute('tabindex','-1');box.focus();
+  ['d-origin','d-dest','d-price','d-car','d-meet'].forEach(id=>{$('#'+id).value=''});
+  dDate.value='';dTime.value='';dCap.set(3);renderPreview();
+});
+$('#d-success').addEventListener('click',e=>{
+  if(e.target.closest('[data-another]')){$('#d-success').hidden=true;dOrigin.focus();return}
+  if(e.target.closest('[data-see]')&&lastCreated){
+    state.query={from:lastCreated.from,to:lastCreated.to,dateKey:lastCreated.dateKey,pax:1,sort:'time'};
+    setSearchForm(state.query);renderResults();go('search');
+    const h=$('#res-head');if(h)h.scrollIntoView({block:'start'});
+  }
+});
+
+/* ---------- ماشین‌حساب تقسیم هزینه ---------- */
+const cFuel=$('#c-fuel'),cToll=$('#c-toll'),cOther=$('#c-other'),cDrv=$('#c-drv'),cPreset=$('#c-preset');
+const cPax=makeStepper($('#c-pax'),1,6,3,()=>renderCalc());
+[cFuel,cToll,cOther].forEach(moneyBlur);
+cPreset.innerHTML='<option value="">مبلغ دلخواه</option>'+ROUTES.map((r,i)=>'<option value="'+i+'">'+r.a+' ← '+r.b+' ('+toFa(r.km)+' کیلومتر)</option>').join('');
+
+function loadCalc(o){
+  cFuel.value=fmt(o.fuel);cToll.value=fmt(o.toll);cOther.value=fmt(o.other);
+  if(o.pax)cPax.set(o.pax);
+  cPreset.value=o.preset===undefined?'':String(o.preset);
+  ['c-fuel','c-toll','c-other'].forEach(id=>setErr(id,''));
+  $('#c-form-err').textContent='';
+  renderCalc();
+}
+cPreset.addEventListener('change',()=>{
+  if(cPreset.value==='')return;
+  const c=costOf(ROUTES[Number(cPreset.value)]);
+  loadCalc({fuel:c.fuel,toll:c.toll,other:c.other,preset:cPreset.value});
+});
+[['c-fuel',cFuel],['c-toll',cToll],['c-other',cOther]].forEach(p=>p[1].addEventListener('input',()=>{cPreset.value='';renderCalc()}));
+cDrv.addEventListener('change',renderCalc);
+$('#c-form').addEventListener('submit',e=>e.preventDefault());
+
+function renderCalc(){
+  const out=$('#c-result'),vals={},errs={};
+  [['c-fuel',cFuel,'سوخت و استهلاک'],['c-toll',cToll,'عوارض'],['c-other',cOther,'سایر هزینه‌ها']].forEach(p=>{
+    const r=parseMoney(p[1].value);
+    if(r.bad){errs[p[0]]='فقط عدد وارد کنید. مثلاً ۱۵۰۰۰۰ یا ۱۵۰٬۰۰۰.';vals[p[0]]=0}
+    else if(r.value>200000000){errs[p[0]]='عدد خیلی بزرگ است.';vals[p[0]]=0}
+    else vals[p[0]]=r.value||0;
+    setErr(p[0],errs[p[0]]||'');
+  });
+  const total=vals['c-fuel']+vals['c-toll']+vals['c-other'];
+  const formErr=$('#c-form-err');
+  if(Object.keys(errs).length){formErr.textContent='';out.innerHTML='<h2>سهم هر نفر</h2><p class="muted">برای دیدن نتیجه، فیلدهای دارای خطا را اصلاح کنید.</p>';return}
+  if(total<=0){formErr.textContent='حداقل یکی از هزینه‌ها را وارد کنید.';out.innerHTML='<h2>سهم هر نفر</h2><p class="muted">هنوز هزینه‌ای وارد نشده است.</p>';return}
+  formErr.textContent='';
+  const pax=cPax.get(),drv=cDrv.checked,people=pax+(drv?1:0);
+  const exact=Math.round(total/people),share=roundUp(total/people,STEP);
+  let bar=drv?'<span class="d" title="راننده">ر</span>':'';
+  for(let i=1;i<=pax;i++)bar+='<span>'+toFa(i)+'</span>';
+  let rows='';
+  for(let n=1;n<=6;n++){
+    const pp=n+(drv?1:0);
+    rows+='<tr'+(n===pax?' class="cur"':'')+'><td>'+toFa(n)+' مسافر</td><td>'+toFa(pp)+' نفر</td><td>'+toman(Math.round(total/pp))+'</td></tr>';
+  }
+  out.innerHTML='<h2>سهم هر مسافر</h2><div class="big-share">'+toman(exact)+'</div>'+
+    '<p class="help">هزینه‌ی کل '+toman(total)+' ÷ '+toFa(people)+' نفر'+(drv?' (راننده و '+toFa(pax)+' مسافر)':'')+' = '+toman(exact)+' برای هر نفر.</p>'+
+    (share!==exact?'<p class="help">برای پرداخت راحت‌تر می‌توانید '+toman(share)+' (گردشده به بالا تا ۵٬۰۰۰ تومان) در نظر بگیرید.</p>':'')+
+    '<div class="split-bar sec-gap" aria-hidden="true">'+bar+'</div>'+
+    '<div class="legend sec-gap">'+(drv?'<span><i class="d"></i>راننده</span>':'')+'<span><i></i>مسافران</span></div>'+
+    '<h3 class="sec-gap">سهم هر نفر با تعداد مسافر متفاوت</h3>'+
+    '<div class="tbl-wrap"><table><thead><tr><th>مسافران</th><th>کل سرنشینان</th><th>سهم هر مسافر</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
+    '<p class="help sec-gap">همه‌ی عددها نمونه‌اند و برای آزمایش نمایش داده می‌شوند.</p>';
+}
+
+/* ---------- حساب من: ورود، نمایه، درخواست‌ها ---------- */
+const meUi={step:'phone',phone:'',busy:false,msg:'',ok:'',edit:false,confirmOut:false,confirmTrip:'',confirmAd:'',next:'',reopen:''};
+const STATUS_FA={pending:['در انتظار تأیید راننده','warn'],approved:['تأیید شد','ok'],rejected:['راننده نپذیرفت',''],cancelled:['لغو شد','']};
+const isPhone=s=>/^09\d{9}$/.test(String(s));
+const phoneHTML=(ph,v)=>(isPhone(ph)?'<a class="tel" href="tel:'+esc(ph)+'" dir="ltr">'+toFa(esc(ph))+'</a>':esc(ph||'—'))+' <span class="chip'+(v?' ok':' warn')+'">'+(v?'تأییدشده با پیامک':'شماره تأیید نشده')+'</span>';
+const meMsg=()=>(meUi.msg?'<p class="err form-err" role="alert">'+esc(meUi.msg)+'</p>':'')+(meUi.ok?'<p class="help" role="status">'+esc(meUi.ok)+'</p>':'');
+async function waitIdle(){let n=0;while(net.loading&&n++<60)await new Promise(r=>setTimeout(r,100))}
+async function reloadNow(){await waitIdle();net.sig='';await loadRemote()}
+
+function loginHTML(){
+  let h='<div class="card pull"><h2>ورود به هم‌سفر</h2>';
+  if(SMS_LOGIN){
+    h+='<p class="help">با شماره‌ی موبایل و کد پیامکی وارد شوید. شماره‌ی شما فقط بعد از تأیید راننده یا مسافر به طرف مقابل نشان داده می‌شود.</p>';
+    if(meUi.step==='code'){
+      h+='<form id="me-code-form" class="stack" novalidate><p class="muted">کد ۶ رقمی به '+toFa(esc(meUi.phone))+' فرستاده شد.</p>'+
+        '<div class="field"><label class="lbl" for="me-code">کد پیامکی</label><input class="in" id="me-code" inputmode="numeric" autocomplete="one-time-code" maxlength="8" dir="ltr"></div>'+meMsg()+
+        '<div class="actions"><button class="btn btn-primary" type="submit"'+(meUi.busy?' disabled':'')+'>ورود</button><button class="btn btn-ghost" type="button" data-me="change-phone">تغییر شماره</button></div></form>';
+    }else{
+      h+='<form id="me-phone-form" class="stack" novalidate><div class="field"><label class="lbl" for="me-phone">شماره‌ی موبایل</label><input class="in" id="me-phone" inputmode="numeric" autocomplete="tel" placeholder="مثلاً ۰۹۱۲۱۲۳۴۵۶۷" maxlength="14" dir="ltr" value="'+esc(meUi.phone)+'"></div>'+meMsg()+
+        '<div class="actions"><button class="btn btn-primary" type="submit"'+(meUi.busy?' disabled':'')+'>ارسال کد پیامکی</button></div></form>';
+    }
+  }else{
+    h+='<p class="notice">حالت آزمایشی بدون پیامک: شماره‌ی شما تأیید نمی‌شود و کسی می‌تواند شماره‌ی دیگری وارد کند. شماره فقط بعد از تأیید راننده یا مسافر به طرف مقابل نشان داده می‌شود. اگر از این حساب خارج شوید، دسترسی به سفرهای ثبت‌شده‌ی خود را از دست می‌دهید.</p>'+
+      '<form id="me-test-form" class="stack" novalidate>'+
+      '<div class="field"><label class="lbl" for="me-name">نام (در سفرها نمایش داده می‌شود)</label><input class="in" id="me-name" autocomplete="name" maxlength="30" placeholder="مثلاً علی"></div>'+
+      '<div class="field"><label class="lbl" for="me-phone">شماره‌ی موبایل</label><input class="in" id="me-phone" inputmode="numeric" autocomplete="tel" maxlength="14" dir="ltr" placeholder="مثلاً ۰۹۱۲۱۲۳۴۵۶۷"></div>'+meMsg()+
+      '<div class="actions"><button class="btn btn-primary" type="submit"'+(meUi.busy?' disabled':'')+'>ورود آزمایشی</button></div></form>';
+  }
+  return h+'</div>';
+}
+function profileHTML(){
+  const lock=SMS_LOGIN&&profile.verified;
+  return '<div class="card pull"><h2>'+(hasProfile()?'ویرایش نام و شماره':'تکمیل نمایه')+'</h2><p class="help">نام در کارت سفرها دیده می‌شود. شماره فقط بعد از تأیید راننده یا مسافر به طرف مقابل نشان داده می‌شود.</p>'+
+    '<form id="me-profile-form" class="stack" novalidate>'+
+    '<div class="field"><label class="lbl" for="me-name">نام</label><input class="in" id="me-name" autocomplete="name" maxlength="30" value="'+esc(profile.name)+'"></div>'+
+    '<div class="field"><label class="lbl" for="me-phone">شماره‌ی موبایل</label><input class="in" id="me-phone" inputmode="numeric" maxlength="14" dir="ltr" value="'+esc(profile.phone)+'"'+(lock?' readonly':'')+'>'+(lock?'<p class="help">شماره‌ی تأییدشده با پیامک قابل تغییر نیست.</p>':'')+'</div>'+meMsg()+
+    '<div class="actions"><button class="btn btn-primary" type="submit"'+(meUi.busy?' disabled':'')+'>ذخیره</button>'+(hasProfile()?'<button class="btn btn-ghost" type="button" data-me="cancel-edit">انصراف</button>':'')+'</div></form></div>';
+}
+function legacyHTML(){
+  return '<div class="card pull"><h2>ورود با شماره‌ی موبایل لازم است</h2><p class="notice">حساب فعلی شما با شماره‌ی تأییدنشده (ورود آزمایشی) ساخته شده و برای ثبت سفر یا درخواست صندلی کافی نیست. خارج شوید و با شماره‌ی موبایل و کد پیامکی وارد شوید.</p>'+meMsg()+'<div class="actions"><button class="btn btn-warn" type="button" data-me="logout">'+(meUi.confirmOut?'مطمئنم، خارج شوم':'خروج و ورود با پیامک')+'</button></div></div>';
+}
+function reqRowDriver(r){
+  const st=STATUS_FA[r.status]||['',''];
+  let h='<li class="req"><div class="req-top"><strong>'+esc(toFa(r.passenger_name||'مسافر'))+'</strong><span class="chip">'+toFa(r.seats)+' صندلی</span><span class="chip'+(st[1]?' '+st[1]:'')+'">'+st[0]+'</span></div>';
+  if(r.status==='approved')h+='<div class="req-sub">شماره‌ی مسافر: '+phoneHTML(r.passenger_phone,r.passenger_verified)+'</div>';
+  if(r.status==='pending')h+='<div class="actions"><button class="btn btn-primary btn-sm" type="button" data-me="approve" data-id="'+esc(r.request_id)+'">تأیید</button><button class="btn btn-warn btn-sm" type="button" data-me="reject" data-id="'+esc(r.request_id)+'">رد</button></div>';
+  return h+'</li>';
+}
+const nowMinTehran=()=>{try{const p=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Tehran',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date()),g=k=>Number((p.find(x=>x.type===k)||{}).value)||0;return (g('hour')%24)*60+g('minute')}catch(_){const d=new Date();return d.getHours()*60+d.getMinutes()}};
+const commOf=t=>mine.comm.find(c=>c.trip_id===t.id);
+function tripStarted(t){return t.dateKey<key(TODAY)||(t.dateKey===key(TODAY)&&t.start<=nowMinTehran())}
+function completeBtn(t){
+  if(!mine.cinfo||!mine.cinfo.enabled||commOf(t)||t.status==='cancelled'||!tripStarted(t))return '';
+  return '<button class="btn btn-primary btn-sm" type="button" data-me="complete-trip" data-id="'+esc(t.id)+'">پایان سفر</button>';
+}
+const COMM_ST={due:['در انتظار پرداخت','warn'],paid:['پرداخت شد','ok'],waived:['بخشوده شد',''],failed:['ناموفق','']};
+const rateTxt=()=>toFa(((mine.cinfo&&Number(mine.cinfo.rate_bps))||0)/100);
+function commRow(c){
+  const st=COMM_ST[c.status]||[String(c.status||''),''];
+  const dt=/^\d{4}-\d{2}-\d{2}$/.test(String(c.trip_date))?dayLabel(keyToDate(String(c.trip_date))):'';
+  let h='<li class="req"><div class="req-top"><strong>'+esc(toFa(c.origin))+' ← '+esc(toFa(c.destination))+'</strong><span class="chip'+(st[1]?' '+st[1]:'')+'">'+st[0]+'</span>'+(c.overdue?'<span class="chip warn">دیرکرد</span>':'')+'</div>'+
+    '<div class="req-sub">'+dt+'، '+toFa(c.seats)+' صندلی، مجموع کرایه '+toman(c.gross_amount)+'، کمیسیون '+toFa(Number(c.rate_bps)/100)+'٪: <strong>'+toman(c.amount)+'</strong></div>';
+  if(c.status==='paid'&&c.last_payment&&c.last_payment.ref_id)h+='<div class="req-sub">کد پیگیری: <span dir="ltr">'+esc(toFa(c.last_payment.ref_id))+'</span></div>';
+  if(c.status==='due')h+='<div class="actions"><button class="btn btn-primary btn-sm" type="button" data-me="pay-comm" data-id="'+esc(c.commission_id)+'"'+(meUi.busy?' disabled':'')+'>پرداخت کمیسیون از طریق زرین‌پال</button></div>';
+  return h+'</li>';
+}
+const AD_ST={pending:['در انتظار تأیید مدیر','warn'],approved:['تأیید شد و نمایش داده می‌شود','ok'],rejected:['رد شد','']};
+function myAdsCard(){
+  if(!mine.ads.length)return '';
+  return '<div class="card" id="my-ads"><h2>تبلیغات من</h2><div class="stack">'+mine.ads.map(x=>{
+    const st=AD_ST[x.status]||['',''];
+    return '<article class="mytrip"><div class="req-top"><strong>'+esc(toFa(x.business_name))+'</strong><span class="chip'+(st[1]?' '+st[1]:'')+'">'+st[0]+'</span></div>'+
+      (x.status==='rejected'&&x.reject_reason?'<p class="help">دلیل رد: '+esc(toFa(x.reject_reason))+'</p>':'')+
+      '<div class="actions"><button class="btn btn-warn btn-sm" type="button" data-me="del-ad" data-id="'+esc(x.id)+'">'+(meUi.confirmAd===x.id?'مطمئنم، حذف شود':'حذف تبلیغ')+'</button></div></article>';
+  }).join('')+'</div></div>';
+}
+function blockCard(){
+  return mine.block?'<div class="card"><h2>حساب راننده مسدود است</h2><p class="notice">مدیر ثبت سفر جدید را برای شما بسته است'+(mine.block.reason?'. دلیل: '+esc(toFa(mine.block.reason)):'')+'. می‌توانید کمیسیون‌های باقی‌مانده را بپردازید. برای بررسی دوباره با پشتیبانی تماس بگیرید.</p></div>':'';
+}
+const jTime=s=>{try{return new Intl.DateTimeFormat('fa-IR-u-ca-persian',{timeZone:'Asia/Tehran',year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'}).format(new Date(s))}catch(_){return ''}};
+function payRow(p){
+  return '<li class="req"><div class="req-top"><strong>'+toman(p.amount)+'</strong><span class="chip ok">پرداخت‌شده</span></div><div class="req-sub">'+esc(toFa(p.origin))+' ← '+esc(toFa(p.destination))+'، '+jTime(p.paid_at)+'</div><div class="req-sub">کد پیگیری: <span dir="ltr">'+esc(toFa(p.ref_id||'—'))+'</span>'+(p.card_last4?'، کارت ****'+esc(toFa(p.card_last4)):'')+'</div></li>';
+}
+function commCard(){
+  if(!mine.cinfo||(!mine.cinfo.enabled&&!mine.comm.length))return '';
+  const due=mine.comm.filter(c=>c.status==='due'),sum=due.reduce((a,c)=>a+(Number(c.amount)||0),0);
+  const pend=mine.cinfo.enabled?mine.past.filter(t=>!commOf(t)):[];
+  let h='<div class="card" id="comm-card"><h2>کمیسیون من</h2><p class="help">کرایه را مسافران مستقیم به شما می‌دهند. هم‌سفر بعد از انجام هر سفر فقط '+rateTxt()+'٪ از مجموع کرایه‌ی مسافران تأییدشده را به‌عنوان کمیسیون می‌گیرد؛ برای هر سفر جداگانه.</p>';
+  if(due.length)h+='<p class="notice">مجموع کمیسیون پرداخت‌نشده: <strong>'+toman(sum)+'</strong></p>';
+  if(pend.length)h+='<h3 class="sub">سفرهای گذشته‌ی بدون ثبت انجام</h3><ul class="reqs">'+pend.map(t=>'<li class="req"><div class="req-top"><strong>'+esc(t.from)+' ← '+esc(t.to)+'</strong></div><div class="req-sub">'+dayLabel(t.date)+'، ساعت '+clock(t.start)+'</div><div class="actions">'+completeBtn(t)+'</div></li>').join('')+'</ul>';
+  h+=mine.comm.length?'<ul class="reqs">'+mine.comm.map(commRow).join('')+'</ul>':'<p class="help">هنوز کمیسیونی ثبت نشده است. بعد از سفر، دکمه‌ی «پایان سفر» را بزنید.</p>';
+  h+='<h3 class="sub">سوابق پرداخت</h3>'+(mine.pays.length?'<ul class="reqs">'+mine.pays.map(payRow).join('')+'</ul>':'<p class="help">هنوز پرداخت موفقی ثبت نشده است. فقط پرداخت‌هایی که زرین‌پال تأیید کرده اینجا می‌آید.</p>');
+  return h+'</div>';
+}
+function tripBlock(t){
+  const reqs=mine.tripReqs.filter(r=>r.trip_id===t.id);
+  const cancelled=t.status==='cancelled';
+  let h='<article class="mytrip'+(cancelled?' is-off':'')+'"><div class="req-top"><strong>'+esc(t.from)+' ← '+esc(t.to)+'</strong>'+(cancelled?'<span class="chip">لغو شد</span>':'<span class="chip seat">'+toFa(t.cap-t.free)+' از '+toFa(t.cap)+' صندلی رزرو</span>')+'</div>'+
+    '<p class="help">'+dayLabel(t.date)+'، ساعت '+clock(t.start)+'، '+toman(t.price)+' برای هر نفر</p>';
+  if(!cancelled){
+    h+=reqs.length?'<ul class="reqs">'+reqs.map(reqRowDriver).join('')+'</ul>':'<p class="help">هنوز درخواستی نیامده است.</p>';
+    h+='<div class="actions">'+completeBtn(t)+'<button class="btn btn-warn btn-sm" type="button" data-me="cancel-trip" data-id="'+esc(t.id)+'">'+(meUi.confirmTrip===t.id?'مطمئنم، سفر لغو شود':'لغو سفر')+'</button></div>';
+  }
+  return h+'</article>';
+}
+function reqRowPassenger(r){
+  const off=r.trip_status==='cancelled';
+  const st=off?['سفر لغو شد','']:(STATUS_FA[r.status]||['','']);
+  const dt=/^\d{4}-\d{2}-\d{2}$/.test(String(r.trip_date))?dayLabel(keyToDate(String(r.trip_date))):'';
+  let h='<article class="mytrip"><div class="req-top"><strong>'+esc(r.origin)+' ← '+esc(r.destination)+'</strong><span class="chip'+(st[1]?' '+st[1]:'')+'">'+st[0]+'</span></div>'+
+    '<p class="help">'+dt+'، ساعت '+clock(Number(r.depart_minute)||0)+'، '+toFa(r.seats)+' صندلی، '+toman((Number(r.price)||0)*(Number(r.seats)||1))+'</p>';
+  if(r.status==='approved'&&!off){
+    h+='<div class="done"><strong>راننده تأیید کرد</strong><span>راننده: '+esc(toFa(r.driver_name||'—'))+(r.car?'، '+esc(toFa(r.car)):'')+'</span><span>محل سوار شدن: '+esc(toFa(r.meet||'با راننده هماهنگ کنید'))+'</span><span>شماره‌ی راننده: '+phoneHTML(r.driver_phone,r.driver_verified)+'</span></div>';
+  }
+  if(!off&&(r.status==='pending'||r.status==='approved'))h+='<div class="actions"><button class="btn btn-warn btn-sm" type="button" data-me="cancel-req" data-id="'+esc(r.request_id)+'">لغو درخواست</button></div>';
+  return h+'</article>';
+}
+function mainHTML(){
+  const trips=mine.trips.slice().sort((a,b)=>a.dateKey.localeCompare(b.dateKey)||a.start-b.start);
+  const reqs=mine.reqs;
+  return '<div class="card pull"><div class="me-head"><span class="av" aria-hidden="true">'+esc(profile.name.charAt(0))+'</span><div><strong>'+esc(profile.name)+'</strong><div class="help">'+phoneHTML(profile.phone,profile.verified)+'</div></div></div>'+meMsg()+
+      '<div class="actions"><button class="btn btn-ghost btn-sm" type="button" data-me="edit-profile">ویرایش نام و شماره</button><button class="btn btn-warn btn-sm" type="button" data-me="logout">'+(meUi.confirmOut?'مطمئنم، خارج شوم':'خروج')+'</button></div></div>'+
+    blockCard()+commCard()+myAdsCard()+'<div class="card"><h2>سفرهای من (به‌عنوان راننده)</h2>'+(trips.length?'<div class="stack">'+trips.map(tripBlock).join('')+'</div>':'<p class="help">هنوز سفری ثبت نکرده‌اید. از بخش «ثبت سفر» شروع کنید.</p>')+'</div>'+
+    '<div class="card"><h2>درخواست‌های صندلی من (به‌عنوان مسافر)</h2>'+(reqs.length?'<div class="stack">'+reqs.map(reqRowPassenger).join('')+'</div>':'<p class="help">هنوز درخواستی نداده‌اید. در جست‌وجو یک سفر را باز کنید و «درخواست صندلی» را بزنید.</p>')+'</div>';
+}
+function renderMe(){
+  const box=$('#me-box');if(!box)return;
+  if(!REMOTE.on){box.innerHTML='<div class="card pull"><h2>حساب من</h2><p class="notice">'+esc(REMOTE.problem||'حساب کاربری فقط وقتی کار می‌کند که سایت به پایگاه داده‌ی مشترک وصل باشد. فعلاً در حالت محلی هستید.')+'</p></div>';return}
+  if(!session){box.innerHTML=loginHTML();return}
+  if(!profile){box.innerHTML='<div class="card pull"><p class="muted">در حال دریافت اطلاعات حساب…</p></div>';loadProfile().then(()=>{if(profile)renderMe();else{profile={name:'',phone:'',verified:false};renderMe()}});return}
+  if(SMS_LOGIN&&!profile.verified){box.innerHTML=legacyHTML();return}
+  if(!hasProfile()||meUi.edit){box.innerHTML=profileHTML();return}
+  box.innerHTML=mainHTML();
+}
+function paintAuth(){
+  const el=$('#d-login-note');
+  if(!el)return;
+  const need=REMOTE.on&&!hasProfile();
+  el.hidden=!need;
+  if(need)el.innerHTML=(SMS_LOGIN?'برای ثبت سفر باید با شماره‌ی موبایل و کد پیامکی وارد شوید. ':'برای ثبت سفر باید وارد شوید و نام و شماره‌ی خود را ذخیره کنید. ')+'<button type="button" class="linkbtn" data-goto-me="driver">رفتن به «حساب من»</button>';
+}
+async function afterAuth(){
+  await loadProfile();
+  await reloadNow();
+  meUi.msg='';meUi.edit=false;
+  if(hasProfile()&&meUi.next){const n=meUi.next,r=meUi.reopen;meUi.next='';meUi.reopen='';go(n);if(r)openTrip(r);return}
+  renderMe();
+}
+async function meRun(fn,ok){
+  if(meUi.busy)return;
+  meUi.busy=true;meUi.msg='';meUi.ok='';renderMe();
+  try{await fn();if(ok)meUi.ok=ok}
+  catch(err){meUi.msg=explain(err,'sms')}
+  meUi.busy=false;
+  if(currentView==='me')renderMe();
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-goto-me]');
+  if(g){meUi.next=g.dataset.gotoMe||'';if(!ov.hidden){meUi.reopen=M.t?M.t.id:'';meUi.next='search'}go('me')}
+});
+$('#me-box').addEventListener('submit',e=>{
+  e.preventDefault();
+  const f=e.target.id,val=id=>{const el=$('#'+id);return el?norm(el.value):''};
+  if(f==='me-test-form'||f==='me-profile-form'){
+    const name=val('me-name').replace(/\s+/g,' '),phone=val('me-phone').replace(/[\s-]/g,'');
+    if(name.length<2||name.length>30||/[<>]/.test(name)){meUi.msg=ERR_TEXT.bad_name;renderMe();return}
+    if(!isPhone(phone)){meUi.msg=ERR_TEXT.bad_phone;renderMe();return}
+    meRun(async()=>{
+      if(f==='me-test-form'&&!session)await signInAnon();
+      await rpc('save_profile',{p_name:name,p_phone:phone});
+      await afterAuth();
+    });
+    return;
+  }
+  if(f==='me-phone-form'){
+    const phone=val('me-phone').replace(/[\s-]/g,'');
+    if(!isPhone(phone)){meUi.msg=ERR_TEXT.bad_phone;meUi.phone=phone;renderMe();return}
+    meUi.phone=phone;
+    meRun(async()=>{await smsSend(phone);meUi.step='code'});
+    return;
+  }
+  if(f==='me-code-form'){
+    const code=val('me-code');
+    if(!/^\d{6}$/.test(code)){meUi.msg=ERR_TEXT.bad_code;renderMe();return}
+    meRun(async()=>{await smsVerify(meUi.phone,code);meUi.step='phone';await afterAuth()});
+  }
+});
+$('#me-box').addEventListener('click',e=>{
+  const b=e.target.closest('[data-me]');if(!b)return;
+  const a=b.dataset.me,id=b.dataset.id;
+  if(a==='change-phone'){meUi.step='phone';meUi.msg='';renderMe();return}
+  if(a==='edit-profile'){meUi.edit=true;meUi.msg='';meUi.ok='';renderMe();return}
+  if(a==='cancel-edit'){meUi.edit=false;meUi.msg='';renderMe();return}
+  if(a==='logout'){
+    if(!meUi.confirmOut){meUi.confirmOut=true;renderMe();return}
+    meUi.confirmOut=false;
+    meRun(async()=>{await signOut();meUi.step='phone';await reloadNow()});return;
+  }
+  if(a==='approve'||a==='reject')meRun(async()=>{await rpc('decide_request',{p_request:id,p_approve:a==='approve'});await reloadNow()},a==='approve'?'درخواست تأیید شد و شماره‌ی مسافر برای شما نمایش داده می‌شود.':'درخواست رد شد.');
+  else if(a==='complete-trip')meRun(async()=>{const r=await rpc('complete_trip',{p_trip:id});await reloadNow();meUi.ok=(r&&r.status==='waived')?'سفر پایان یافت. کمیسیون این سفر کمتر از حداقل بود و دریافت نمی‌شود.':'سفر پایان یافت. کمیسیون این سفر '+toman(r&&r.amount)+' محاسبه شد؛ می‌توانید آن را همین‌جا بپردازید.'});
+  else if(a==='pay-comm')meRun(async()=>{
+    const tok=await freshToken();
+    const r=await http(REMOTE.url+'/functions/v1/pay-create',{method:'POST',headers:{apikey:REMOTE.key,'Content-Type':'application/json',Authorization:'Bearer '+tok},body:JSON.stringify({commission_id:id})});
+    const u=String(r&&r.url||'');
+    const okUrl=/^https:\/\/(www|sandbox)\.zarinpal\.com\/pg\/StartPay\/[A-Za-z0-9]{10,64}$/.test(u)||(/^http:\/\/127\.0\.0\.1[:\/]/.test(REMOTE.url)&&/^http:\/\/127\.0\.0\.1:\d+\/pg\/StartPay\/[A-Za-z0-9]{10,64}$/.test(u));
+    if(!okUrl)throw{kind:'http',status:500,data:{error:'gateway_error'}};
+    meUi.ok='در حال انتقال به درگاه پرداخت…';
+    location.assign(u);
+  });
+  else if(a==='del-ad'){
+    if(meUi.confirmAd!==id){meUi.confirmAd=id;renderMe();return}
+    meUi.confirmAd='';
+    meRun(async()=>{await rpc('delete_my_ad',{p_ad:id});await reloadNow();loadAds(true)},'تبلیغ حذف شد.');
+  }
+  else if(a==='cancel-req')meRun(async()=>{await rpc('cancel_request',{p_request:id});await reloadNow()},'درخواست لغو شد.');
+  else if(a==='cancel-trip'){
+    if(meUi.confirmTrip!==id){meUi.confirmTrip=id;renderMe();return}
+    meUi.confirmTrip='';
+    meRun(async()=>{await rpc('cancel_trip',{p_trip:id});await reloadNow()},'سفر لغو شد.');
+  }
+});
+
+/* ---------- تبلیغات و معرفی کسب‌وکارها ---------- */
+const ads={list:[],off:false,last:0,loading:false,img:'',busy:false};
+const SAMPLE_ADS=[
+  {id:'s1',business_name:'کافه‌ی نمونه',description:'این یک آگهی نمونه است تا شکل نمایش را ببینید. تبلیغ واقعی بعد از تأیید مدیر اینجا می‌آید.',phone:'',link:'',image_data:'',featured:false,sample:true},
+  {id:'s2',business_name:'تعمیرگاه نمونه',description:'نمونه‌ی دیگری از معرفی کسب‌وکار با توضیحات کوتاه و دکمه‌های تماس و وب‌سایت.',phone:'',link:'',image_data:'',featured:false,sample:true}
+];
+const okImg=s=>/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/=]+$/.test(String(s||''))&&String(s).length<=90000;
+const okLink=s=>/^https:\/\/[^\s<>"']+$/.test(String(s||''))&&String(s).length<=200;
+function adCard(x){
+  const img=okImg(x.image_data)?'<img class="ad-img" alt="" loading="lazy" src="'+x.image_data+'">':'<div class="ad-ph" aria-hidden="true">'+esc(String(x.business_name||'?').charAt(0))+'</div>';
+  const tel=String(x.phone||'').replace(/\D/g,'');
+  let act='';
+  if(!x.sample){
+    if(/^0\d{9,10}$/.test(tel))act+='<a class="btn btn-primary" href="tel:'+tel+'">تماس: <span dir="ltr">'+esc(toFa(tel))+'</span></a>';
+    if(okLink(x.link))act+='<a class="btn btn-ghost" href="'+esc(x.link)+'" target="_blank" rel="noopener noreferrer nofollow">وب‌سایت</a>';
+  }
+  return '<article class="ad-card'+(x.featured?' feat':'')+'">'+img+'<div class="ad-body"><h3>'+esc(toFa(x.business_name))+(x.featured?'<span class="chip feat">ویژه</span>':'')+(x.sample?'<span class="chip">نمونه</span>':'')+'</h3><p>'+esc(toFa(x.description))+'</p>'+(act?'<div class="ad-actions">'+act+'</div>':'')+'</div></article>';
+}
+function renderAds(){
+  const sec=$('#ads');if(!sec)return;
+  sec.hidden=ads.off;
+  const list=REMOTE.on?ads.list:SAMPLE_ADS;
+  $('#ads-list').innerHTML=list.length?list.map(adCard).join(''):'<p class="help">هنوز تبلیغی ثبت نشده است. اولین نفر باشید!</p>';
+}
+async function loadAds(force){
+  if(ads.loading||(!force&&Date.now()-ads.last<60000))return;
+  if(!REMOTE.on){renderAds();return}
+  ads.loading=true;
+  try{
+    const r=await rest('rpc/public_ads',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});
+    ads.list=Array.isArray(r)?r.filter(x=>x&&typeof x==='object'&&x.id&&x.business_name).slice(0,60):[];
+    ads.off=false;ads.last=Date.now();
+  }catch(err){
+    if(err&&err.status===404)ads.off=true;   // SQL تبلیغات هنوز اجرا نشده: بخش پنهان می‌ماند
+  }
+  ads.loading=false;renderAds();
+}
+function adMsg(t){const m=$('#ads-msg');if(!m)return;m.hidden=!t;m.innerHTML=t||''}
+function adOpen(){
+  if(!REMOTE.on){adMsg('ثبت تبلیغ فقط وقتی سایت به پایگاه داده‌ی مشترک وصل باشد کار می‌کند. فعلاً در حالت محلی هستید.');return}
+  if(!hasProfile()){adMsg((SMS_LOGIN?'برای ثبت تبلیغ با شماره‌ی موبایل و کد پیامکی وارد شوید. ':'برای ثبت تبلیغ ابتدا وارد شوید و نام و شماره‌ی خود را ذخیره کنید. ')+'<button type="button" class="linkbtn" data-goto-me="search">رفتن به «حساب من»</button>');return}
+  adMsg('');
+  $('#ad-form').reset();ads.img='';$('#ad-prev').hidden=true;$('#ad-err').textContent='';$('#ad-send').disabled=false;
+  const d=$('#ad-dlg');if(d.showModal)d.showModal();else d.setAttribute('open','')
+}
+function adShrink(file){
+  return new Promise((res,rej)=>{
+    if(!file||!/^image\/(jpeg|png|webp)$/.test(file.type)||file.size>12*1024*1024){rej(new Error('type'));return}
+    const url=URL.createObjectURL(file),im=new Image();
+    im.onload=()=>{
+      URL.revokeObjectURL(url);
+      let max=560,out='';
+      for(let round=0;round<4&&!out;round++){
+        const k=Math.min(1,max/Math.max(im.width,im.height)),cv=document.createElement('canvas');
+        cv.width=Math.max(1,Math.round(im.width*k));cv.height=Math.max(1,Math.round(im.height*k));
+        const cx=cv.getContext('2d');cx.fillStyle='#fff';cx.fillRect(0,0,cv.width,cv.height);cx.drawImage(im,0,0,cv.width,cv.height);
+        for(const q of [.78,.65,.52,.4]){const u=cv.toDataURL('image/jpeg',q);if(u.length<=65000){out=u;break}}
+        max=Math.round(max*.75);
+      }
+      out?res(out):rej(new Error('big'));
+    };
+    im.onerror=()=>{URL.revokeObjectURL(url);rej(new Error('type'))};
+    im.src=url;
+  });
+}
+document.addEventListener('click',e=>{
+  if(e.target.closest('#ad-new'))adOpen();
+  else if(e.target.closest('#ad-cancel')){const d=$('#ad-dlg');d.close?d.close():d.removeAttribute('open')}
+});
+$('#ad-desc').addEventListener('input',()=>{$('#ad-desc-n').textContent=toFa(String($('#ad-desc').value).replace(/\s+/g,' ').trim().length)+' از ۴۰۰ حرف (حداقل ۱۰)'});
+$('#ad-img').addEventListener('change',async e=>{
+  const f=e.target.files&&e.target.files[0];ads.img='';$('#ad-prev').hidden=true;$('#ad-err').textContent='';
+  if(!f)return;
+  try{ads.img=await adShrink(f);$('#ad-prev').src=ads.img;$('#ad-prev').hidden=false}
+  catch(_){e.target.value='';$('#ad-err').textContent=ERR_TEXT.bad_ad_image}
+});
+$('#ad-form').addEventListener('submit',async e=>{
+  e.preventDefault();if(ads.busy)return;
+  const nt=s=>String(s).replace(/ي/g,'ی').replace(/ك/g,'ک').replace(/[\u200e\u200f]/g,'').replace(/\s+/g,' ').trim();   // نیم‌فاصله حفظ می‌شود
+  const v=id=>norm($('#'+id).value),vt=id=>nt($('#'+id).value),err=t=>{$('#ad-err').textContent=t};
+  const biz=vt('ad-biz'),ct=vt('ad-contact'),ph=v('ad-phone').replace(/[\s-]/g,''),ds=vt('ad-desc'),lk=v('ad-link').replace(/\s/g,'');
+  if(biz.length<2||biz.length>60||/[<>]/.test(biz))return err(ERR_TEXT.bad_ad_business);
+  if(ct.length<2||ct.length>40||/[<>]/.test(ct))return err(ERR_TEXT.bad_ad_contact);
+  if(!/^0\d{9,10}$/.test(ph))return err(ERR_TEXT.bad_ad_phone);
+  if(ds.length<10||ds.length>400||/[<>]/.test(ds))return err(ERR_TEXT.bad_ad_description);
+  if(lk&&!okLink(lk))return err(ERR_TEXT.bad_ad_link);
+  ads.busy=true;$('#ad-send').disabled=true;err('');
+  try{
+    await rpc('submit_ad',{p_business:biz,p_contact:ct,p_phone:ph,p_description:ds,p_link:lk||null,p_image:ads.img||null});
+    const d=$('#ad-dlg');d.close?d.close():d.removeAttribute('open');
+    adMsg('تبلیغ شما ثبت شد و بعد از تأیید مدیر سایت نمایش داده می‌شود. وضعیت آن را در «حساب من» ببینید.');
+    loadMine().then(()=>{if(currentView==='me')renderMe()}).catch(()=>{});
+  }catch(ex){
+    err(ex&&ex.status===404?'بخش تبلیغات هنوز در Supabase راه‌اندازی نشده است (فایل supabase-ads.sql).':explain(ex))
+  }
+  ads.busy=false;$('#ad-send').disabled=false;
+});
+
+/* ---------- مسیریابی و شروع ---------- */
+const VIEWS=['search','driver','me','split'];
+let currentView='search';
+const PAY_MSG={ok:['ok','پرداخت کمیسیون با موفقیت انجام شد. سپاس!'],duplicate:['ok','پرداخت انجام شد (این کمیسیون قبلاً هم پرداخت شده بود؛ در صورت کسر مبلغ دوباره، با پشتیبانی تماس بگیرید).'],canceled:['msg','پرداخت لغو شد. هر زمان خواستید می‌توانید دوباره تلاش کنید.'],failed:['msg','پرداخت تأیید نشد. اگر مبلغی از حساب شما کم شده، معمولاً تا چند ساعت برمی‌گردد؛ می‌توانید دوباره تلاش کنید.'],pending:['msg','نتیجه‌ی پرداخت هنوز مشخص نیست. چند دقیقه بعد همین بخش را دوباره ببینید؛ وضعیت واقعی از سرور خوانده می‌شود.'],unknown:['msg','این پرداخت شناخته نشد.']};
+function takePayHash(){
+  const raw=(location.hash||'').slice(1),i=raw.indexOf('?');
+  if(i<0)return raw;
+  const v=raw.slice(0,i),m=raw.slice(i+1).match(/(?:^|&)pay=([a-z]+)(?:&|$)/);
+  if(m&&PAY_MSG[m[1]]){const p=PAY_MSG[m[1]];meUi.msg='';meUi.ok='';meUi[p[0]]=p[1];try{history.replaceState(null,'','#'+v)}catch(_){}}
+  return v;
+}
+function show(v){
+  if(VIEWS.indexOf(v)<0)v='search';
+  const changed=v!==currentView;
+  currentView=v;
+  if(v==='search'||v==='me')refresh(true);
+  if(v==='search')loadAds(false);
+  if(v==='me')renderMe();
+  if(v==='driver')paintAuth();
+  VIEWS.forEach(n=>{$('#v-'+n).hidden=n!==v;$$('[data-copy="'+n+'"]').forEach(e=>{e.hidden=n!==v})});
+  $$('[data-nav]').forEach(a=>{if(a.dataset.nav===v)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
+  if(changed&&!ov.hidden)closeModal();
+  if(changed)window.scrollTo(0,0);
+}
+function go(v){
+  try{if(location.hash!=='#'+v)location.hash=v}catch(err){}
+  show(v);
+}
+document.addEventListener('click',e=>{
+  const a=e.target.closest('a[data-nav],a[data-nav-link]');
+  if(!a)return;
+  e.preventDefault();
+  go(a.dataset.nav||a.dataset.navLink);
+});
+window.addEventListener('hashchange',()=>show(takePayHash()));
+
+loadCalc({fuel:costOf(ROUTES[0]).fuel,toll:ROUTES[0].toll,other:OTHER,pax:3,preset:'0'});
+renderPreview();
+renderResults();
+paintNet();
+loadAds(true);
+$$('[data-foot-mode]').forEach(el=>{el.textContent=REMOTE.on?'سفرهایی که ثبت می‌کنید در پایگاه داده‌ی مشترک ذخیره می‌شود و همه‌ی بازدیدکنندگان آن را می‌بینند. نام شما کنار سفر دیده می‌شود؛ شماره‌ی تلفن فقط بعد از تأیید راننده یا مسافر به طرف مقابل نشان داده می‌شود.':'سفرهایی که ثبت می‌کنید فقط در همین صفحه می‌ماند و با بارگذاری دوباره پاک می‌شود.'});
+setInterval(()=>{if(!document.hidden&&(currentView==='search'||currentView==='me'))refresh(false)},POLL_MS);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&(currentView==='search'||currentView==='me'))refresh(false)});
+window.addEventListener('online',()=>refresh(true));
+show(takePayHash());
+})();
+
+</script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('service-worker.js').catch(function(){})})}</script>
+</body>
+</html>

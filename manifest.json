@@ -1,0 +1,26 @@
+{
+  "id": "/",
+  "name": "HamSafar | هم‌سفر",
+  "short_name": "هم‌سفر",
+  "description": "اشتراک سفر بین‌شهری و تقسیم هزینه. پرداخت‌های حالت آزمایشی (Sandbox) پرداخت واقعی نیستند.",
+  "lang": "fa",
+  "dir": "rtl",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "fullscreen",
+  "display_override": ["fullscreen", "standalone", "minimal-ui"],
+  "orientation": "portrait",
+  "background_color": "#F1F6F5",
+  "theme_color": "#0A585D",
+  "categories": ["travel", "navigation", "lifestyle"],
+  "icons": [
+    {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ],
+  "shortcuts": [
+    {"name": "جست‌وجوی سفر", "short_name": "جست‌وجو", "url": "./index.html#search", "icons": [{"src": "icons/icon-192.png", "sizes": "192x192"}]},
+    {"name": "ثبت سفر", "short_name": "ثبت سفر", "url": "./index.html#driver", "icons": [{"src": "icons/icon-192.png", "sizes": "192x192"}]},
+    {"name": "تقسیم هزینه", "short_name": "هزینه", "url": "./index.html#split", "icons": [{"src": "icons/icon-192.png", "sizes": "192x192"}]}
+  ]
+}
